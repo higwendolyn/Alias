@@ -180,6 +180,7 @@ a {
 }
 
 .main-content {
+  line-height: 1.8;
   word-wrap: break-word;
 
   :first-child {
@@ -190,12 +191,12 @@ a {
     max-width: 64rem;
     padding: 3rem 6rem;
     margin: 0 auto;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   @include medium {
     padding: 3rem 4rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   @include small {
@@ -318,7 +319,7 @@ a {
   }
 
   blockquote {
-    padding: 0 1rem;
+    padding: 1rem;
     margin-left: 0;
     color: $blockquote-text-color;
     border-left: 0.3rem solid $border-color;
