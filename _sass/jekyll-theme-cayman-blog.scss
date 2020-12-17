@@ -188,21 +188,29 @@ a {
   }
 
   @include large {
-    max-width: 64rem;
+    max-width: 76rem;
     padding: 3rem 6rem;
     margin: 0 auto;
     font-size: 1rem;
+    .article-content {
+      max-width: 50rem;
+    }
   }
 
   @include medium {
     padding: 3rem 4rem;
     font-size: 1rem;
+    .scroll-nav {
+      display: none;
+    }
   }
 
   @include small {
     padding: 2rem 1rem;
     font-size: 1rem;
-
+    .scroll-nav {
+      display: none;
+    }
     ul,
     ol {
       margin-top: 0;

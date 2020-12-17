@@ -15,11 +15,11 @@ layout: default
       {% endif %}</p>
   </header> -->
 
-  <div itemprop="articleBody">
+  <div itemprop="articleBody" class="article-content">
     {{ content }}
   </div>
 
   {% if site.disqus.shortname %}
-    {% include disqus_comments.html %}
+  {% include disqus_comments.html %}
   {% endif %}
 </article>

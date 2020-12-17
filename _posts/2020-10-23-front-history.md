@@ -114,3 +114,31 @@ Web 1.0 时代，非常适合创业型小项目，不分前后端，经常 3-5 �
 # 前端时间轴
 
 ![](../../../images/front9.png)
+
+* 1990年，Tim 以**超文本语言 HTML** 为基础在 NeXT 电脑上发明了最原始的 Web 浏览器。
+* 1994年11月，网景公司成立，并发布**Mosaic Netscape 1.0 beta 浏览器**，后改名为 Navigator。
+* 1994 W3C诞生。
+* 1995年网景推出JavaScript。
+* 1996年微软发布JScript并内置于IE3。JavaScript与JScript存在差异。导致程序员开发的网页**无法同时兼容IE和Navigator浏览器**。IE开始抢夺Navigator的市场份额，导致了**第一次浏览器大战**。
+* 1996年11月，网景将JavaScript提交到ECMA以便将其国际标准化。
+* 1997年6月，**ECMAScript1.0**推出。
+* 1998.6 **ECMAScript 2**规范发布。
+* 1999.12 **ECMAScript 3** 规范发布。此后10年，基本没有发生变动。ECMAScript 3 成为当今主流浏览器最广泛使用和实现的语言规范基础。
+* 2001.5 W3C 推出了 **CSS 3.0** 规范草案
+* 2004年11月。**火狐浏览器**诞生。第二次浏览器战争开始。（第一次浏览器战争以IE的完胜告终，垄断浏览器市场，并且**IE不遵循W3C标准**）
+* 2005年 **AJAX**诞生。局部刷新页面。
+* 第二次浏览器战争中，随着以 Firefox 和 Opera 为首的 W3C 阵营与 IE 对抗程度的加剧，浏览器碎片化问题越来越严重，不同的浏览器执行不同的标准，对于开发人员来说这是一个噩梦。
+* **为了解决浏览器兼容性问题**，Dojo、jQuery、YUI、ExtJS、MooTools 等前端 Framework 相继诞生。前端开发人员用这些 Framework 频繁发送 AJAX 请求到后台，在得到数据后，再用这些 Framework 更新 DOM 树。
+* 其中，**jQuery**独领风骚，几乎成了所有网站的标配。
+* 2008，**HTML5**草案发布。
+* 2008.12 **Chrome**浏览器诞生，并搭配JavaScript引擎V8（V8是被设计用来提高网页浏览器内部JavaScript执行的性能）。
+* 2009.12 **ECMAScript 5.0** 规范发布。
+* 2009 **Node.js**诞生。
+* 2010年起，**Angular ，Vue， React** MVVM框架诞生。
+* 2015 年 6 月，**ECMAScript 6.0** 发布。
+
+# 引擎V8与JavaScript
+
+## 参考文章
+
+[前端发展历史，渲染进程](https://juejin.cn/post/6844904116200669197)
