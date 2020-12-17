@@ -147,15 +147,19 @@
     </section>
 
     <script>
-        const ct = document.querySelector('.article-content');  //".post-content"指向文章内容所在的div，需根据实际情况修改
-        scrollnav.init(ct, {
-            debug: false,
-            easingStyle: 'linear',
-            //section为一级目录，subsection为二级目录
-            //以下两行意为h3为一级目录，h4为二级目录（个人只需要一级目录，所以注释了二级目录）
-            sections: ($('.article-content > h1').length > 0) ? 'h1' : 'h2',
-            subSections: ($('.post-content > h1').length > 0) ? 'h2' : 'h3',
-        });
+        // 页面加载需要时间会影响导航的准确性
+        setTimeout(() => {
+            const ct = document.querySelector('.article-content');  //".post-content"指向文章内容所在的div，需根据实际情况修改
+            scrollnav.init(ct, {
+                debug: false,
+                easingStyle: 'linear',
+                //section为一级目录，subsection为二级目录
+                //以下两行意为h3为一级目录，h4为二级目录（个人只需要一级目录，所以注释了二级目录）
+                sections: ($('.article-content > h1').length > 0) ? 'h1' : 'h2',
+                subSections: ($('.post-content > h1').length > 0) ? 'h2' : 'h3',
+            });
+        }, 1500)
+
         var menu = document.querySelector("nav.site-nav");
         var checkbox = document.getElementById("nav-trigger");
 
