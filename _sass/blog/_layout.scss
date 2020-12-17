@@ -151,11 +151,15 @@
  * scroll list
  */
 .scroll-nav {
+  width: 300px;
   background-color: #f8f9fa;
-  padding: 15px 10px;
+  padding: 15px 0;
   position: sticky;
   top: 10px;
   float: right;
+}
+.scroll-nav__list {
+  padding: 15px 10px;
 }
 .scroll-nav__list, .scroll-nav__sub-list {
   margin: 0;
@@ -163,7 +167,6 @@
   list-style-type: none;
   line-height: 28px;
   background: #f4f5f5;
-  padding: 15px 10px;
 }
 
 .scroll-nav__item {
