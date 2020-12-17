@@ -186,7 +186,6 @@ a {
   :first-child {
     margin-top: 0;
   }
-
   @include large {
     max-width: 80rem;
     padding: 3rem 6rem;
@@ -194,6 +193,9 @@ a {
     font-size: 1rem;
     .article-content {
       max-width: 47rem;
+    }
+    .post-list-content {
+      padding-left: 16rem;
     }
   }
 
