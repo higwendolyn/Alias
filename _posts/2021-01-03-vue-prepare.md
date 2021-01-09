@@ -145,7 +145,79 @@ xiaoming instanceof Student; // true
 
 现在我们就认为```xiaoming```、```xiaohong```这些对象“继承”自```Student```。
 
+```
+xiaoming.name; // '小明'
+xiaohong.name; // '小红'
+xiaoming.hello; // function: Student.hello()
+xiaohong.hello; // function: Student.hello()
+xiaoming.hello === xiaohong.hello; // false
+```
+
+```xiaoming```和```xiaohong```各自的```name```不同，这是对的，否则我们无法区分谁是谁了。
+
+```xiaoming```和```xiaohong```各自的```hello```是一个函数，但它们是两个不同的函数，虽然函数名称和代码都是相同的！
+
+如果我们通过```new Student()```创建了很多对象，这些对象的```hello```函数实际上只需要共享同一个函数就可以了，这样可以节省很多内存。
+
+要让创建的对象共享一个```hello```函数，根据对象的属性查找原则，我们只要把```hello```函数移动到```xiaoming```、```xiaohong```这些对象共同的原型上就可以了，也就是```Student.prototype```：
+
+![image.png](../../../images/prepare3.png)
+
+```
+function Student(name) {
+    this.name = name;
+}
+
+Student.prototype.hello = function () {
+    alert('Hello, ' + this.name + '!');
+};
+```
+用new创建基于原型的JavaScript的对象就是这么简单！
+
 ### 原型继承
+
+JavaScript由于采用原型继承，我们无法直接扩展一个Class，因为根本不存在Class这种类型。
+
+```Student```构造函数：
+
+```
+function Student(props) {
+    this.name = props.name || 'Unnamed';
+}
+
+Student.prototype.hello = function () {
+    alert('Hello, ' + this.name + '!');
+}
+```
+
+```Student```的原型链：
+
+![image.png](../../../images/prepare4.png)
+
+基于```Student```扩展出```PrimaryStudent```，可以先定义出```PrimaryStudent```：
+
+```
+function PrimaryStudent(props) {
+    // 调用Student构造函数，绑定this变量:
+    Student.call(this, props);
+    this.grade = props.grade || 1;
+}
+```
+
+调用了```Student```构造函数不等于继承了```Student```，```PrimaryStudent```创建的对象的原型是：
+
+```
+new PrimaryStudent() ----> PrimaryStudent.prototype ----> Object.prototype ----> null
+```
+
+必须想办法把原型链修改为：
+
+```
+new PrimaryStudent() ----> PrimaryStudent.prototype ----> Student.prototype ----> Object.prototype ----> null
+```
+
+这样新的基于```PrimaryStudent```创建的对象不但能调用```PrimaryStudent.prototype```定义的方法，也可以调用```Student.prototype```定义的方法。
+
 ### class继承
 
 ## 参考文章
