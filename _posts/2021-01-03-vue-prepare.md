@@ -326,7 +326,7 @@ PrimaryStudent.prototype.getGrade = function () {
 
 <font style="color: #ec7907;">构造函数绑定</font>
 
-最简单的方法，使用call或apply方法，将父对象的构造函数绑定在子对象上
+最简单的方法，使用```call```或```apply```方法，将父对象的构造函数绑定在子对象上
 
 ```JavaScript
 　　function Cat(name,color){
@@ -360,21 +360,21 @@ PrimaryStudent.prototype.getGrade = function () {
 　　alert(cat1.species); // 动物
 ```
 
-任何一个prototype对象都有一个constructor属性，指向它的构造函数。
+任何一个```prototype```对象都有一个constructor属性，指向它的构造函数。
 
-如果没有"Cat.prototype = new Animal();"这一行，Cat.prototype.constructor是指向Cat的；加了这一行以后，Cat.prototype.constructor指向Animal
+如果没有"Cat.prototype = new Animal();"这一行，```Cat.prototype.constructor```是指向```Cat```的；加了这一行以后，```Cat.prototype.constructor```指向```Animal```
 
 ```JavaScript
 alert(Cat.prototype.constructor == Animal); //true
 ```
 
-每一个实例也有一个constructor属性，默认调用prototype对象的constructor属性
+每一个实例也有一个constructor属性，默认调用```prototype```对象的```constructor```属性
 
 ```JavaScript
 alert(cat1.constructor == Cat.prototype.constructor); // true
 ```
 
-因此，在运行"Cat.prototype = new Animal();"这一行之后，cat1.constructor也指向Animal！
+因此，在运行"Cat.prototype = new Animal();"这一行之后，```cat1.constructor```也指向```Animal```！
 
 这显然会导致继承链的紊乱（cat1明明是用构造函数Cat生成的），因此我们必须手动纠正，将Cat.prototype对象的constructor值改为Cat。
 
@@ -382,9 +382,82 @@ alert(cat1.constructor == Cat.prototype.constructor); // true
 
 <font style="color: #ec7907;">直接继承prototype</font>
 
+第三种方法是对第二种方法的改进。由于Animal对象中，不变的属性都可以直接写入```Animal.prototype```。所以，我们也可以让Cat()跳过 Animal()，直接继承Animal.prototype。
+
+```JavaScript
+   Cat.prototype = Animal.prototype;
+
+　　Cat.prototype.constructor = Cat;  // 实际上把Animal.prototype对象的constructor属性也改掉了
+
+　　var cat1 = new Cat("大毛","黄色");
+
+　　alert(cat1.species); // 动物    
+```
+
+这样做的优点是效率比较高（不用执行和建立Animal的实例了），比较省内存。缺点是 ```Cat.prototype```和```Animal.prototype```现在指向了同一个对象，那么任何对Cat.prototype的修改，都会反映到Animal.prototype。
+
+<font style="color: #ec7907;">利用空对象作为中介</font>
+
+如下：
+
+```JavaScript
+　　var F = function(){}; // F是空对象，所以几乎不占内存
+
+　　F.prototype = Animal.prototype;
+
+　　Cat.prototype = new F();
+
+　　Cat.prototype.constructor = Cat; // 修改Cat的prototype对象，就不会影响到Animal的prototype对象
+```
+
+封装函数
+
+```JavaScript
+　　   function extend(Child, Parent) {
+
+　　　　var F = function(){};
+
+　　　　F.prototype = Parent.prototype;
+
+　　　　Child.prototype = new F();
+
+　　　　Child.prototype.constructor = Child;
+
+　　　　Child.uber = Parent.prototype; // 为子对象设一个uber属性，这个属性直接指向父对象的prototype属性; 等于在子对象上打开一条通道，可以直接调用父对象的方法
+
+　　}
+```
+
+
+<font style="color: #ec7907;">拷贝继承</font>
+
+简单说，如果把父对象的所有属性和方法，拷贝进子对象，不也能够实现继承
+
+```JavaScript
+　　function extend2(Child, Parent) {
+
+　　　　var p = Parent.prototype;
+
+　　　　var c = Child.prototype;
+
+　　　　for (var i in p) {
+
+　　　　　　c[i] = p[i]; // 用的是浅拷贝的方法,c[i] 是指向到 p[i], 而非赋值,建议使用深拷贝
+
+　　　　}
+
+　　　　c.uber = p;
+
+　　}
+```
+
 
 
 ### class继承
+
+新的关键字```class```从ES6开始正式被引入到JavaScript中。```class```的目的就是让定义类更简单
+
+
 
 ## 参考文章
 
