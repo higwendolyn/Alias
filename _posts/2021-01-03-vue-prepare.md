@@ -145,7 +145,7 @@ xiaoming instanceof Student; // true
 
 现在我们就认为```xiaoming```、```xiaohong```这些对象“继承”自```Student```。
 
-```
+```JavaScript
 xiaoming.name; // '小明'
 xiaohong.name; // '小红'
 xiaoming.hello; // function: Student.hello()
@@ -153,9 +153,9 @@ xiaohong.hello; // function: Student.hello()
 xiaoming.hello === xiaohong.hello; // false
 ```
 
-```xiaoming```和```xiaohong```各自的```name```不同，这是对的，否则我们无法区分谁是谁了。
+* ```xiaoming```和```xiaohong```各自的```name```不同，这是对的，否则我们无法区分谁是谁了。
 
-```xiaoming```和```xiaohong```各自的```hello```是一个函数，但它们是两个不同的函数，虽然函数名称和代码都是相同的！
+* ```xiaoming```和```xiaohong```各自的```hello```是一个函数，但它们是两个不同的函数，虽然函数名称和代码都是相同的！
 
 如果我们通过```new Student()```创建了很多对象，这些对象的```hello```函数实际上只需要共享同一个函数就可以了，这样可以节省很多内存。
 
@@ -163,7 +163,7 @@ xiaoming.hello === xiaohong.hello; // false
 
 ![image.png](../../../images/prepare3.png)
 
-```
+```JavaScript
 function Student(name) {
     this.name = name;
 }
@@ -178,7 +178,7 @@ Student.prototype.hello = function () {
 
 JavaScript由于采用原型继承，我们无法直接扩展一个Class，因为根本不存在Class这种类型。
 
-```Student```构造函数：
+上文，```Student```构造函数：
 
 ```
 function Student(props) {
@@ -190,7 +190,7 @@ Student.prototype.hello = function () {
 }
 ```
 
-```Student```的原型链：
+所以，```Student```的原型链：
 
 ![image.png](../../../images/prepare4.png)
 
@@ -217,6 +217,172 @@ new PrimaryStudent() ----> PrimaryStudent.prototype ----> Student.prototype ----
 ```
 
 这样新的基于```PrimaryStudent```创建的对象不但能调用```PrimaryStudent.prototype```定义的方法，也可以调用```Student.prototype```定义的方法。
+
+如果你想用最简单粗暴的方法这么干：
+
+```
+PrimaryStudent.prototype = Student.prototype;
+```
+
+这样的话，```PrimaryStudent```和```Student```共享一个原型对象，那还要定义```PrimaryStudent```干啥？
+
+我们必须借助一个中间对象来实现正确的原型链，这个中间对象的原型要指向```Student.prototype```。
+
+```JavaScript
+// PrimaryStudent构造函数:
+function PrimaryStudent(props) {
+    Student.call(this, props);
+    this.grade = props.grade || 1;
+}
+
+// 空函数F:
+function F() {
+}
+
+// 把F的原型指向Student.prototype:
+F.prototype = Student.prototype;
+
+// 把PrimaryStudent的原型指向一个新的F对象，F对象的原型正好指向Student.prototype:
+PrimaryStudent.prototype = new F();
+
+// 把PrimaryStudent原型的构造函数修复为PrimaryStudent:
+PrimaryStudent.prototype.constructor = PrimaryStudent;
+
+// 继续在PrimaryStudent原型（就是new F()对象）上定义方法：
+PrimaryStudent.prototype.getGrade = function () {
+    return this.grade;
+};
+
+// 创建xiaoming:
+var xiaoming = new PrimaryStudent({
+    name: '小明',
+    grade: 2
+});
+xiaoming.name; // '小明'
+xiaoming.grade; // 2
+
+// 验证原型:
+xiaoming.__proto__ === PrimaryStudent.prototype; // true
+xiaoming.__proto__.__proto__ === Student.prototype; // true
+
+// 验证继承关系:
+xiaoming instanceof PrimaryStudent; // true
+xiaoming instanceof Student; // true
+```
+
+新的原型链：
+
+![image.png](../../../images/prepare5.png)
+
+<font style="color: red;">注意</font>
+
+函数```F```仅用于桥接，我们仅创建了一个```new F()```实例，而且，没有改变原有的```Student```定义的原型链。
+
+如果把继承这个动作用一个```inherits()```函数封装起来，还可以隐藏F的定义，并简化代码：
+
+```JavaScript
+function inherits(Child, Parent) {
+    var F = function () {};
+    F.prototype = Parent.prototype;
+    Child.prototype = new F();
+    Child.prototype.constructor = Child;
+}
+```
+
+这个```inherits()```函数可以复用：
+
+```JavaScript
+function Student(props) {
+    this.name = props.name || 'Unnamed';
+}
+
+Student.prototype.hello = function () {
+    alert('Hello, ' + this.name + '!');
+}
+
+function PrimaryStudent(props) {
+    Student.call(this, props);
+    this.grade = props.grade || 1;
+}
+
+// 实现原型继承链:
+inherits(PrimaryStudent, Student);
+
+// 绑定其他方法到PrimaryStudent原型:
+PrimaryStudent.prototype.getGrade = function () {
+    return this.grade;
+};
+```
+
+---
+
+**构造函数的继承**
+
+* 构造函数绑定
+* prototype模式
+* 直接继承prototype
+* 利用空对象作为中介
+* 拷贝继承
+
+<font style="color: #ec7907;">构造函数绑定</font>
+
+最简单的方法，使用call或apply方法，将父对象的构造函数绑定在子对象上
+
+```JavaScript
+　　function Cat(name,color){
+
+　　　　Animal.apply(this, arguments);
+
+　　　　this.name = name;
+
+　　　　this.color = color;
+
+　　}
+
+　　var cat1 = new Cat("大毛","黄色");
+
+　　alert(cat1.species); // 动物
+```
+---
+
+<font style="color: #ec7907;">prototype模式</font>
+
+如下：
+
+```JavaScript
+　　Cat.prototype = new Animal();  // 将Cat的prototype对象指向一个Animal的实例,
+                                  // 它相当于完全删除了prototype 对象原先的值，然后赋予一个新值
+
+　　Cat.prototype.constructor = Cat;
+
+　　var cat1 = new Cat("大毛","黄色");
+
+　　alert(cat1.species); // 动物
+```
+
+任何一个prototype对象都有一个constructor属性，指向它的构造函数。
+
+如果没有"Cat.prototype = new Animal();"这一行，Cat.prototype.constructor是指向Cat的；加了这一行以后，Cat.prototype.constructor指向Animal
+
+```JavaScript
+alert(Cat.prototype.constructor == Animal); //true
+```
+
+每一个实例也有一个constructor属性，默认调用prototype对象的constructor属性
+
+```JavaScript
+alert(cat1.constructor == Cat.prototype.constructor); // true
+```
+
+因此，在运行"Cat.prototype = new Animal();"这一行之后，cat1.constructor也指向Animal！
+
+这显然会导致继承链的紊乱（cat1明明是用构造函数Cat生成的），因此我们必须手动纠正，将Cat.prototype对象的constructor值改为Cat。
+
+---
+
+<font style="color: #ec7907;">直接继承prototype</font>
+
+
 
 ### class继承
 

@@ -187,12 +187,12 @@ a {
     margin-top: 0;
   }
   @include large {
-    max-width: 80rem;
+    max-width: 88rem;
     padding: 3rem 6rem;
     margin: 0 auto;
     font-size: 1rem;
     .article-content {
-      max-width: 47rem;
+      max-width: 55rem;
     }
     .post-list-content {
       padding-left: 16rem;
