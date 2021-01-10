@@ -396,6 +396,8 @@ alert(cat1.constructor == Cat.prototype.constructor); // true
 
 这样做的优点是效率比较高（不用执行和建立Animal的实例了），比较省内存。缺点是 ```Cat.prototype```和```Animal.prototype```现在指向了同一个对象，那么任何对Cat.prototype的修改，都会反映到Animal.prototype。
 
+---
+
 <font style="color: #ec7907;">利用空对象作为中介</font>
 
 如下：
@@ -428,6 +430,7 @@ alert(cat1.constructor == Cat.prototype.constructor); // true
 　　}
 ```
 
+---
 
 <font style="color: #ec7907;">拷贝继承</font>
 
@@ -457,7 +460,69 @@ alert(cat1.constructor == Cat.prototype.constructor); // true
 
 新的关键字```class```从ES6开始正式被引入到JavaScript中。```class```的目的就是让定义类更简单
 
+用函数实现```Student```的方法：
 
+```JS
+function Student(name) {
+    this.name = name;
+}
+
+Student.prototype.hello = function () {
+    alert('Hello, ' + this.name + '!');
+}
+```
+
+用新的```class```关键字来编写```Student```，可以这样写：
+
+```JS
+class Student {
+    constructor(name) {
+        this.name = name;
+    }
+
+    hello() {
+        alert('Hello, ' + this.name + '!');
+    }
+}
+```
+
+比较一下就可以发现，```class```的定义包含了构造函数```constructor```和定义在原型对象上的函数```hello()```（注意没有function关键字），这样就避免了```Student.prototype.hello = function () {...}```这样分散的代码。
+
+创建一个```Student```对象代码和前面章节完全一样：
+
+```JS
+var xiaoming = new Student('小明');
+xiaoming.hello();
+```
+
+---
+
+**class继承**
+
+直接通过```extends```来实现:
+
+```JS
+class PrimaryStudent extends Student {
+    constructor(name, grade) {
+        super(name); // 记得用super调用父类的构造方法!
+        this.grade = grade;
+    }
+
+    myGrade() {
+        alert('I am at grade ' + this.grade);
+    }
+}
+```
+
+<font style="color: red;">注意</font>
+
+所以，```PrimaryStudent```的定义也是```class```关键字实现的，而```extends```则表示原型链对象来自```Student```。子类的构造函数可能会与父类不太相同，例如，PrimaryStudent需要name和grade两个参数，并且需要通过```super(name)```来调用父类的构造函数，否则父类的```name```属性无法正常初始化。
+
+```PrimaryStudent```已经自动获得了父类```Student```的hello方法，我们又在子类中定义了新的myGrade方法。
+
+## Object.defineProperty
+
+这个方法在js中十分强大，Vue正是使用了它实现了响应式数据功能。
 
 ## 参考文章
 
