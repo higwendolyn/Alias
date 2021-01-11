@@ -10,14 +10,16 @@ title: "Vue源码解析准备篇"
 ## Flow基本语法
 
 javascript是弱类型的语言，在写代码灰常爽的同时也十分容易犯错误，所以Facebook搞了这么一个类型检查工具，可以加入类型的限制，提高代码质量，举个例子:
-```
+
+```javascript
 function sum(a, b) {
   return a + b;
 }
 ```
 
 如果这么调用这个函数sum('a', 1) 甚至sum(1, [1,2,3])这么调用，执行时会得到一些你想不到的结果，这样编程未免太不稳定了。那我们看看用了Flow之后的结果：
-```
+
+```javascript
 function sum(a: number, b:number) {
   return a + b;
 }
@@ -28,7 +30,8 @@ function sum(a: number, b:number) {
 其实这里大家可能有疑问，这么写还是js吗？ 浏览器还能认识执行吗？当然不认识了，所以需要翻译或者说编译。其实现在前端技术发展太快了，各种插件层出不穷--Babel、Typescript等等，其实都是将一种更好的写法编译成浏览器认识的javascript代码（我们以前都是写浏览器认识的javascript代码的）。
 
 我们继续说Flow的事情，在Vue源码中其实出现的Flow语法都比较好懂，比如下面这个函数的定义:
-```
+
+```javascript
 export function renderList (
   val: any,
   render: (
@@ -61,7 +64,7 @@ index?:number这个我们想想正则表达式中？的含义---0个或者1个�
 
 创建一个Array对象：
 
-```
+```javascript
 var arr = [1, 2, 3];
 ```
 
@@ -74,7 +77,8 @@ arr ----> Array.prototype ----> Object.prototype ----> null
 ``Array.prototype``定义了```indexOf()```、```shift()```等方法，因此你可以在所有的Array对象上直接调用这些方法。
 
 创建一个函数：
-```
+
+```javascript
 function foo() {
     return 0;
 }
@@ -96,7 +100,7 @@ foo ----> Function.prototype ----> Object.prototype ----> null
 
 除了直接用```{ ... }```创建一个对象外，JavaScript还可以用一种构造函数的方法来创建对象。
 
-```JavaScript
+```javascript
 function Student(name) {
     this.name = name;
     this.hello = function () {
@@ -128,7 +132,7 @@ xiaojun  ↗
 
 用```new Student()```创建的对象还从原型上获得了一个```constructor```属性，它指向函数```Student```本身：
 
-```JavaScript
+```javascript
 xiaoming.constructor === Student.prototype.constructor; // true
 Student.prototype.constructor === Student; // true
 
@@ -145,7 +149,7 @@ xiaoming instanceof Student; // true
 
 现在我们就认为```xiaoming```、```xiaohong```这些对象“继承”自```Student```。
 
-```JavaScript
+```javascript
 xiaoming.name; // '小明'
 xiaohong.name; // '小红'
 xiaoming.hello; // function: Student.hello()
@@ -163,7 +167,7 @@ xiaoming.hello === xiaohong.hello; // false
 
 ![image.png](../../../images/prepare3.png)
 
-```JavaScript
+```javascript
 function Student(name) {
     this.name = name;
 }
@@ -180,7 +184,7 @@ JavaScript由于采用原型继承，我们无法直接扩展一个Class，因�
 
 上文，```Student```构造函数：
 
-```
+```javascript
 function Student(props) {
     this.name = props.name || 'Unnamed';
 }
@@ -196,7 +200,7 @@ Student.prototype.hello = function () {
 
 基于```Student```扩展出```PrimaryStudent```，可以先定义出```PrimaryStudent```：
 
-```
+```javascript
 function PrimaryStudent(props) {
     // 调用Student构造函数，绑定this变量:
     Student.call(this, props);
@@ -228,7 +232,7 @@ PrimaryStudent.prototype = Student.prototype;
 
 我们必须借助一个中间对象来实现正确的原型链，这个中间对象的原型要指向```Student.prototype```。
 
-```JavaScript
+```javascript
 // PrimaryStudent构造函数:
 function PrimaryStudent(props) {
     Student.call(this, props);
@@ -280,7 +284,7 @@ xiaoming instanceof Student; // true
 
 如果把继承这个动作用一个```inherits()```函数封装起来，还可以隐藏F的定义，并简化代码：
 
-```JavaScript
+```javascript
 function inherits(Child, Parent) {
     var F = function () {};
     F.prototype = Parent.prototype;
@@ -291,7 +295,7 @@ function inherits(Child, Parent) {
 
 这个```inherits()```函数可以复用：
 
-```JavaScript
+```javascript
 function Student(props) {
     this.name = props.name || 'Unnamed';
 }
@@ -328,20 +332,14 @@ PrimaryStudent.prototype.getGrade = function () {
 
 最简单的方法，使用```call```或```apply```方法，将父对象的构造函数绑定在子对象上
 
-```JavaScript
-　　function Cat(name,color){
-
-　　　　Animal.apply(this, arguments);
-
-　　　　this.name = name;
-
-　　　　this.color = color;
-
-　　}
-
-　　var cat1 = new Cat("大毛","黄色");
-
-　　alert(cat1.species); // 动物
+```javascript
+function Cat(name,color){
+  Animal.apply(this, arguments);
+  this.name = name;
+  this.color = color;
+}
+var cat1 = new Cat("大毛","黄色");
+alert(cat1.species); // 动物
 ```
 ---
 
@@ -349,28 +347,25 @@ PrimaryStudent.prototype.getGrade = function () {
 
 如下：
 
-```JavaScript
-　　Cat.prototype = new Animal();  // 将Cat的prototype对象指向一个Animal的实例,
-                                  // 它相当于完全删除了prototype 对象原先的值，然后赋予一个新值
-
-　　Cat.prototype.constructor = Cat;
-
-　　var cat1 = new Cat("大毛","黄色");
-
-　　alert(cat1.species); // 动物
+```javascript
+Cat.prototype = new Animal();  // 将Cat的prototype对象指向一个Animal的实例,
+                               // 它相当于完全删除了prototype 对象原先的值，然后赋予一个新值
+Cat.prototype.constructor = Cat;
+var cat1 = new Cat("大毛","黄色");
+alert(cat1.species); // 动物
 ```
 
 任何一个```prototype```对象都有一个constructor属性，指向它的构造函数。
 
 如果没有"Cat.prototype = new Animal();"这一行，```Cat.prototype.constructor```是指向```Cat```的；加了这一行以后，```Cat.prototype.constructor```指向```Animal```
 
-```JavaScript
+```javascript
 alert(Cat.prototype.constructor == Animal); //true
 ```
 
 每一个实例也有一个constructor属性，默认调用```prototype```对象的```constructor```属性
 
-```JavaScript
+```javascript
 alert(cat1.constructor == Cat.prototype.constructor); // true
 ```
 
@@ -384,14 +379,11 @@ alert(cat1.constructor == Cat.prototype.constructor); // true
 
 第三种方法是对第二种方法的改进。由于Animal对象中，不变的属性都可以直接写入```Animal.prototype```。所以，我们也可以让Cat()跳过 Animal()，直接继承Animal.prototype。
 
-```JavaScript
-   Cat.prototype = Animal.prototype;
-
-　　Cat.prototype.constructor = Cat;  // 实际上把Animal.prototype对象的constructor属性也改掉了
-
-　　var cat1 = new Cat("大毛","黄色");
-
-　　alert(cat1.species); // 动物    
+```javascript
+Cat.prototype = Animal.prototype;
+Cat.prototype.constructor = Cat;  // 实际上把Animal.prototype对象的constructor属性也改掉了
+var cat1 = new Cat("大毛","黄色");
+alert(cat1.species); // 动物    
 ```
 
 这样做的优点是效率比较高（不用执行和建立Animal的实例了），比较省内存。缺点是 ```Cat.prototype```和```Animal.prototype```现在指向了同一个对象，那么任何对Cat.prototype的修改，都会反映到Animal.prototype。
@@ -402,32 +394,23 @@ alert(cat1.constructor == Cat.prototype.constructor); // true
 
 如下：
 
-```JavaScript
-　　var F = function(){}; // F是空对象，所以几乎不占内存
-
-　　F.prototype = Animal.prototype;
-
-　　Cat.prototype = new F();
-
-　　Cat.prototype.constructor = Cat; // 修改Cat的prototype对象，就不会影响到Animal的prototype对象
+```javascript
+var F = function(){}; // F是空对象，所以几乎不占内存
+F.prototype = Animal.prototype;
+Cat.prototype = new F();
+Cat.prototype.constructor = Cat; // 修改Cat的prototype对象，就不会影响到Animal的prototype对象
 ```
 
 封装函数
 
-```JavaScript
-　　   function extend(Child, Parent) {
-
-　　　　var F = function(){};
-
-　　　　F.prototype = Parent.prototype;
-
-　　　　Child.prototype = new F();
-
-　　　　Child.prototype.constructor = Child;
-
-　　　　Child.uber = Parent.prototype; // 为子对象设一个uber属性，这个属性直接指向父对象的prototype属性; 等于在子对象上打开一条通道，可以直接调用父对象的方法
-
-　　}
+```javascript
+function extend(Child, Parent) {
+  var F = function(){};
+  F.prototype = Parent.prototype;
+  Child.prototype = new F();
+  Child.prototype.constructor = Child;
+  Child.uber = Parent.prototype; // 为子对象设一个uber属性，这个属性直接指向父对象的prototype属性; 等于在子对象上打开一条通道，可以直接调用父对象的方法
+}
 ```
 
 ---
@@ -436,25 +419,16 @@ alert(cat1.constructor == Cat.prototype.constructor); // true
 
 简单说，如果把父对象的所有属性和方法，拷贝进子对象，不也能够实现继承
 
-```JavaScript
-　　function extend2(Child, Parent) {
-
-　　　　var p = Parent.prototype;
-
-　　　　var c = Child.prototype;
-
-　　　　for (var i in p) {
-
-　　　　　　c[i] = p[i]; // 用的是浅拷贝的方法,c[i] 是指向到 p[i], 而非赋值,建议使用深拷贝
-
-　　　　}
-
-　　　　c.uber = p;
-
-　　}
+```javascript
+function extend2(Child, Parent) {
+  var p = Parent.prototype;
+  var c = Child.prototype;
+  for (var i in p) {
+    c[i] = p[i]; // 用的是浅拷贝的方法,c[i] 是指向到 p[i], 而非赋值,建议使用深拷贝
+  }
+  c.uber = p;
+}
 ```
-
-
 
 ### class继承
 
@@ -462,7 +436,7 @@ alert(cat1.constructor == Cat.prototype.constructor); // true
 
 用函数实现```Student```的方法：
 
-```JS
+```javascript
 function Student(name) {
     this.name = name;
 }
@@ -474,7 +448,7 @@ Student.prototype.hello = function () {
 
 用新的```class```关键字来编写```Student```，可以这样写：
 
-```JS
+```javascript
 class Student {
     constructor(name) {
         this.name = name;
@@ -501,7 +475,7 @@ xiaoming.hello();
 
 直接通过```extends```来实现:
 
-```JS
+```javascript
 class PrimaryStudent extends Student {
     constructor(name, grade) {
         super(name); // 记得用super调用父类的构造方法!
@@ -518,11 +492,192 @@ class PrimaryStudent extends Student {
 
 所以，```PrimaryStudent```的定义也是```class```关键字实现的，而```extends```则表示原型链对象来自```Student```。子类的构造函数可能会与父类不太相同，例如，PrimaryStudent需要name和grade两个参数，并且需要通过```super(name)```来调用父类的构造函数，否则父类的```name```属性无法正常初始化。
 
-```PrimaryStudent```已经自动获得了父类```Student```的hello方法，我们又在子类中定义了新的myGrade方法。
+此外，```PrimaryStudent```已经自动获得了父类```Student```的hello方法，我们又在子类中定义了新的myGrade方法。
 
 ## Object.defineProperty
 
 这个方法在js中十分强大，Vue正是使用了它实现了响应式数据功能。
+
+```javascript
+export function defineReactive (
+  obj: Object,
+  key: string,
+  val: any,
+  customSetter?: ?Function,
+  shallow?: boolean
+) {
+  .....
+  Object.defineProperty(obj, key, {
+    enumerable: true,
+    configurable: true,
+    get: function reactiveGetter () {
+      const value = getter ? getter.call(obj) : val
+      if (Dep.target) {
+        dep.depend()
+        if (childOb) {
+          childOb.dep.depend()
+          if (Array.isArray(value)) {
+            dependArray(value)
+          }
+        }
+      }
+      return value
+    },
+    set: function reactiveSetter (newVal) {
+      const value = getter ? getter.call(obj) : val
+      /* eslint-disable no-self-compare */
+      if (newVal === value || (newVal !== newVal && value !== value)) {
+        return
+      }
+      /* eslint-enable no-self-compare */
+      if (process.env.NODE_ENV !== 'production' && customSetter) {
+        customSetter()
+      }
+      if (setter) {
+        setter.call(obj, newVal)
+      } else {
+        val = newVal
+      }
+      childOb = !shallow && observe(newVal)
+      dep.notify()
+    }
+  })
+}
+```
+
+## Vnode概念
+
+Vnode，顾名思义，Virtual node，虚拟节点，首先声明，这不是Vue自己首创的概念，其实Github上早就有一个类似的项目:Snabbdom。
+
+<font style="color: #ec7907;">为啥要用Vnode呢？</font>
+
+其实原因主要是原生的dom节点**对象太大**了，如果采用之前的Jquery这种方式直接操作dom，**性能差**，所以snabbdom或者Vue中应用了Vnode。
+
+看看Vue源码对Vnode的定义：
+
+```javascript
+export default class VNode {
+  tag: string | void;
+  data: VNodeData | void;
+  children: ?Array<VNode>;
+  text: string | void;
+  elm: Node | void;
+  ns: string | void;
+  context: Component | void; // rendered in this component's scope
+  key: string | number | void;
+  componentOptions: VNodeComponentOptions | void;
+  componentInstance: Component | void; // component instance
+  parent: VNode | void; // component placeholder node
+
+  // strictly internal
+  raw: boolean; // contains raw HTML? (server only)
+  isStatic: boolean; // hoisted static node
+  isRootInsert: boolean; // necessary for enter transition check
+  isComment: boolean; // empty comment placeholder?
+  isCloned: boolean; // is a cloned node?
+  isOnce: boolean; // is a v-once node?
+  asyncFactory: Function | void; // async component factory function
+  asyncMeta: Object | void;
+  isAsyncPlaceholder: boolean;
+  ssrContext: Object | void;
+  fnContext: Component | void; // real context vm for functional nodes
+  fnOptions: ?ComponentOptions; // for SSR caching
+  fnScopeId: ?string;
+....
+}
+```
+
+其实大多数场景下即便有很多修改，但是如果从宏观角度观看，其实修改的点不多。
+
+举个例子：三个dom节点A B C ----> 依次会改成 B C D
+
+* **Jquery**：当碰到第一次A改为B时，修改了一次，再碰到B改为C，又修改了一次，再次碰到C改为D，又又修改了一次。（无法以全局视角看问题）
+
+显然其实从宏观上看，只需要删除A，然后末尾加上D即可；这种优化是需要从**宏观角度**看才行。
+
+* **Vue**：从全局看问题的方式就是异步，先把修改放到队列中，然后整成一批去修改，做diff，这个时候从统计学意义上来讲确实可以优化性能。这也是为啥Vue源码中出现下述代码的原因:
+
+```javascript
+ queueWatcher(this);
+```
+## 函数柯里化
+
+将一个函数拆分成多个函数，是固定部分参数，返回一个接受剩余参数的函数，也称为部分计算函数，目的是为了缩小适用范围，创建一个针对性更强的函数。
+
+```javascript
+// 实现一个简单的加法
+function add(a,b){return a+b}
+add(1,2);
+// 用柯里化实现
+const currying = (x) => {
+     return (y) => {return x+y}
+}
+console.log(currying(1)(2)) // 3
+```
+
+柯里化函数就是**高阶函数**的一种。这里就会有人提问了，为什么要那么费劲实现add函数？有道经典的面试题实现add(1)(2)(3)(4)=10;
+
+```javascript
+// 我们可以这样理解调用add(1)时返回一个函数fn，然后执行fn(2)依次被调用，当执行到最后一次返回结果
+function add(num) {
+    var sum=num;
+    var fn=function(v) {
+        sum+=v;
+        return fn
+    }; 
+    fn.toString=function() {
+        return sum
+    };
+    return fn
+}
+console.log(add(1)(2)(3)(4)) // 10
+// 执行add(1)时返回了fn函数给2，3，4执行，同时定义了fn的toString方法，
+// 每个对象的toString和valueOf方法都可以被改写，每个对象执行完毕，如果被用以操作JavaScript解析器就会自动调用对象的toString或者valueOf方法
+// 利用toString隐式调用的特性，当最后执行时隐式调用，并计算最终的值返回
+```
+
+面试题的内容还有 add(1)(1,2,3)(2)=9 这样的形式
+
+```javascript
+function add() {
+  var args = [...arguments];
+  var fn=function() {
+  args.push(...arguments);
+  return add.apply(null, args)
+  };
+  fn.toString=function() {
+    return args.reduce(function (a, b) {
+      return a + b;
+    });
+  };
+  return fn
+}
+console.log(add(1)(1,2,3)(2))
+```
+
+缺点：性能上会受到影响，比如add函数里面需要创建数组去存放每次调用的时候的参数，创建闭包函数这些都会对内存跟速度上会带来花销，存取arguments对象通常要比存取命名参数要慢一点。
+
+Vue源码是这么应用这个特性的，Vue源码中有一个platform目录，专门存放和平台相关的源码（Vue可以在多平台上运行 比如Weex）。
+
+##  编译原理基础知识
+
+首先通过parse函数将template编译为抽象语法树ast，然后对ast进行代码优化，最后生成render函数。
+
+```javascript
+  const ast = parse(template.trim(), options)
+  if (options.optimize !== false) {
+    optimize(ast, options)
+  }
+  const code = generate(ast, options)
+  return {
+    ast,
+    render: code.render,
+    staticRenderFns: code.staticRenderFns
+  }
+```
+
+
+
 
 ## 参考文章
 
