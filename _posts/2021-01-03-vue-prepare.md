@@ -545,6 +545,21 @@ export function defineReactive (
 }
 ```
 
+设置值时再通知一下View视图做更新，Vue源码正是通过这种方式实现了**访问属性时收集依赖**，设置属性时源码有一句```dep.notify```，里面便是通知视图更新的相关操作。
+
+```javascript
+let x = {}
+Object.defineProperty(x, 1, {
+      get: function(){
+           console.log("getter called!")
+      },
+      set: function(newVal){
+            console.log("setter called! newVal is:" + newVal)
+      }
+})
+```
+
+
 ## Vnode概念
 
 Vnode，顾名思义，Virtual node，虚拟节点，首先声明，这不是Vue自己首创的概念，其实Github上早就有一个类似的项目:Snabbdom。
@@ -657,7 +672,7 @@ console.log(add(1)(1,2,3)(2))
 
 缺点：性能上会受到影响，比如add函数里面需要创建数组去存放每次调用的时候的参数，创建闭包函数这些都会对内存跟速度上会带来花销，存取arguments对象通常要比存取命名参数要慢一点。
 
-Vue源码是这么应用这个特性的，Vue源码中有一个platform目录，专门存放和平台相关的源码（Vue可以在多平台上运行 比如Weex）。
+Vue源码是这么应用这个特性的，Vue源码中有一个**platform目录**，专门存放和平台相关的源码（Vue可以在多平台上运行 比如Weex）。
 
 ##  编译原理基础知识
 
