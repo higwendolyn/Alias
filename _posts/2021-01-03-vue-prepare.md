@@ -235,7 +235,7 @@ PrimaryStudent.prototype = Student.prototype;
 ```javascript
 // PrimaryStudent构造函数:
 function PrimaryStudent(props) {
-    Student.call(this, props);
+    Student.call(this, props); // // 调用Student构造函数，绑定this变量:
     this.grade = props.grade || 1;
 }
 
@@ -248,6 +248,9 @@ F.prototype = Student.prototype;
 
 // 把PrimaryStudent的原型指向一个新的F对象，F对象的原型正好指向Student.prototype:
 PrimaryStudent.prototype = new F();
+
+// 以上三句也可改成
+// PrimaryStudent.prototype = Object.Create(Student.prototype);
 
 // 把PrimaryStudent原型的构造函数修复为PrimaryStudent:
 PrimaryStudent.prototype.constructor = PrimaryStudent;
@@ -289,6 +292,8 @@ function inherits(Child, Parent) {
     var F = function () {};
     F.prototype = Parent.prototype;
     Child.prototype = new F();
+    // 以上也可改成
+    // Child.prototype = Object.Create(Parent.prototype);
     Child.prototype.constructor = Child;
 }
 ```
