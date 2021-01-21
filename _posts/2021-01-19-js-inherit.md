@@ -27,7 +27,7 @@ function Parent1() {
     this.play = [1, 2, 3]
 }
 function Child1() {
-    this.type = 'child2';
+    this.type = 'child1';
 }
 Child1.prototype = new Parent1();
 
@@ -37,4 +37,24 @@ var s1 = new Child1();
 var s2 = new Child1();
 s1.play.push(4);
 console.log(s1.play, s2.play); // 引用类型，内存空间共享的，当一个发生变化，另外一个也随之进行变化
+```
+
+## 构造函数继承（借助call）
+
+```javascript
+function Parent1() {
+    this.name = 'parent1';
+}
+Parent1.prototype.getName = function (){
+    return this.name;
+}
+
+function Child1() {
+    Parent1.call(this);
+    this.type = 'child1';
+}
+
+let child = new Child1();
+console.log(child); // 没问题
+console.log(child.getName()); // 会报错
 ```
