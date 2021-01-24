@@ -188,30 +188,44 @@ a {
   }
   @include large {
     max-width: 88rem;
-    padding: 3rem 6rem;
+    padding: 0 6rem 3rem 6rem;
     margin: 0 auto;
     font-size: 1rem;
+    .artile-detail {
+      padding-top: 3rem;
+    }
     .article-content {
       max-width: 55rem;
     }
     .post-list-content {
-      padding-left: 16rem;
+      padding-top: 3rem;
+      display: flex;
+      justify-content: space-between;
+      .category-list {
+        width: 350px;
+      }
     }
   }
 
   @include medium {
-    padding: 3rem 4rem;
+    padding: 0 4rem 3rem 4rem;
     font-size: 1rem;
-    .scroll-nav {
+    .scroll-nav, .category-list {
       display: none;
+    }
+    .artile-detail, .post-list-content {
+      padding-top: 3rem;
     }
   }
 
   @include small {
-    padding: 2rem 1rem;
+    padding: 0 1rem 2rem 1rem;
     font-size: 1rem;
-    .scroll-nav {
+    .scroll-nav, .category-list {
       display: none;
+    }
+    .artile-detail, .post-list-content {
+      padding-top: 2rem;
     }
     ul,
     ol {

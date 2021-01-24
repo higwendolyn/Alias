@@ -115,6 +115,12 @@
 .post-list {
   margin-left: 0;
   list-style: none;
+  width: 100%;
+  padding-right: 20px;
+
+  .pagination {
+    float: right;
+  }
 
   > li {
     margin-bottom: $spacing-unit / 1.5;
@@ -194,5 +200,20 @@
   background-color: #ebedef;
   &:hover {
     text-decoration: none;
+  }
+}
+
+.tag-box {
+  display: table;
+  list-style: none outside none;
+  li {
+    display: inline-block;
+    margin: 0 3px;
+    line-height: 2;
+    a {
+      padding: 2px 4px;
+      background-color: rgba(#159957, 0.22);
+      box-shadow: 0 0px 4px rgba(black, 1 / 6 * 2);
+    }
   }
 }

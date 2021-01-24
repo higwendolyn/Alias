@@ -24,8 +24,13 @@ github:
 
 plugins:
   - jekyll-target-blank
+  - jekyll-paginate
 
 target-blank:
     rel: nofollow
 
 header_page_refs: ['now', 'about', 'contact']
+
+# 每页有几个项目
+paginate: 10
+paginate_path: "page:num/"
