@@ -31,6 +31,8 @@ target-blank:
 
 header_page_refs: ['now', 'about', 'contact']
 
+permalink: /:year/:month/:day/:title
+
 # 每页有几个项目
 paginate: 10
-paginate_path: "page:num/"
+paginate_path: "page/:num/"
