@@ -30,7 +30,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.5;
   color: $body-text-color;
 }
@@ -113,11 +113,11 @@ a {
   background-image: linear-gradient(120deg, $header-bg-color-secondary, $header-bg-color);
 
   @include large {
-    padding: 3rem 6rem;
+    padding: 1rem 6rem;
   }
 
   @include medium {
-    padding: 2rem 4rem;
+    padding: 1rem 4rem;
   }
 
   @include small {
@@ -187,15 +187,15 @@ a {
     margin-top: 0;
   }
   @include large {
-    max-width: 88rem;
+    max-width: 80rem;
     padding: 0 6rem 3rem 6rem;
     margin: 0 auto;
-    font-size: 1rem;
+    font-size: 12px;
     .artile-detail {
       padding-top: 3rem;
     }
     .article-content {
-      max-width: 55rem;
+      max-width: 48rem;
     }
     .post-list-content {
       padding: 3rem 10rem 0 10rem;
@@ -209,7 +209,7 @@ a {
 
   @include medium {
     padding: 0 4rem 3rem 4rem;
-    font-size: 1rem;
+    font-size: 12px;
     .scroll-nav, .category-list {
       display: none;
     }
@@ -220,7 +220,7 @@ a {
 
   @include small {
     padding: 0 1rem 2rem 1rem;
-    font-size: 1rem;
+    font-size: 12px;
     .scroll-nav, .category-list {
       display: none;
     }
@@ -407,11 +407,11 @@ a {
   border-top: solid 1px $hr-border-color;
 
   @include large {
-    font-size: 1rem;
+    font-size: 12px;
   }
 
   @include medium {
-    font-size: 1rem;
+    font-size: 12px;
   }
 
   @include small {
