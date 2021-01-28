@@ -230,3 +230,7 @@ no-cache直接不进行强缓存，走协商缓存，而max-age=0是进行强缓
 <font style="color: red;">Ctrl+F5强制刷新</font>|<font style="color: red;">无效</font>|<font style="color: red;">无效</font>
 
 即：F5 会 跳过强缓存规则，直接走协商缓存；Ctrl+F5 ，跳过所有缓存规则，和第一次请求一样，重新获取资源
+
+![image.png](../../../images/cache17.png)
+
+![image.png](../../../images/cache18.png)
