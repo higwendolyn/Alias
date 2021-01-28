@@ -74,7 +74,32 @@ web缓存分为很多种：**数据库缓存**、**代理服务器缓存**、还
 
 如果用了这个命令就不会进行缓存，每次请求资源都要从服务器重新获取。
 
-<font style="color: #ec7907;">7.must-revalidate指定如果页面是过期的，则去服务器进行获取</font>
+<font style="color: #ec7907;">7.must-revalidate</font>
+指定如果页面是过期的，则去服务器进行获取
+
+#### request的cache-control和response的cache-control的区别
+
+定义：
+* response中的cache-control：由服务器应答时发送的cache-control
+* request中的cache-control：由用户代理，通常是浏览器，请求资源时发送的cache-control
+
+<font style="color: #ec7907;">request的cache-control：</font>
+
+**cache-control:no-cache** 告诉HTTP消息链上的缓存系统(也就是浏览器的缓存和代理服务器上的缓存)，本次请求要求<mark>忽略一级缓存</mark>，必须是原始服务器重新计算生成回应给用户。
+
+>即使浏览器上的本地缓存未过期，或者代理服务器上的缓存未过期，都不要将这些缓存作为回应，<mark>请求头里的no-cache表示浏览器不想读缓存，并不是说没有缓存。</mark>当我们在浏览器中强制刷新页面（按ctrl+F5），发送的就是这个头（不同很多浏览器将cache-contro:no-cache和pragam:no-cache两个头一起发送）；如果直接按F5的话，请求头是max-age=0，只跳过强缓存，但进行协商缓存。
+
+**pragma:no-cache** 和cache-control:no-cache一样，不过出于兼容HTTP/1.0，所以有些浏览器会保留这个头。注意pragma:no-cache只应该出现在Request中，表明不想获取缓存。HTTP没有哪条条文对Response中的pragma:no-cache进行定义，所以Response中的pragma:no-cache是无效的。
+
+<font style="color: #ec7907;">response的cache-control：</font>
+
+**cache-control:no-cache** 服务器告诉HTTP消息链上的缓存系统（比如varnish， squid，cdn等），不要缓存这个response结果。其实这个<mark>不是百分百肯定</mark>，而且不同浏览器好像接收到这个头时也有不同反应。
+
+>**chrome**：再访问相同的URL时候是发出if-modified-since。这说明即使接收到cache-control:no-contro，chrome也会进行缓存（协商缓存）。
+>
+>**IE9**: 再次访问相同URL时，跟第一次访问（无缓存情况下）一样，没有if-modified-since，也没有其他缓存相关的头域，而且缓存文件夹也没有缓存文件。也就是说，IE9接收到cache-control:no-cache，不会将response内容缓存起来。
+>
+>FF：跟IE9行为类似
 
 #### Expires
 
@@ -142,4 +167,66 @@ no-cache直接不进行强缓存，走协商缓存，而max-age=0是进行强缓
 * 如果资源没更改，返回304，浏览器读取本地缓存。
 * 如果资源有更改，返回200，返回最新的资源。
 
+### 浏览器缓存位置
+
+以博客的请求为例，状态码为灰色的请求则代表使用了```强制缓存```，其中的```Size```的值记录了该缓存存放的位置。分别为**from memory cache** 和 **from disk cache**。如下图：
+
+![image.png](../../../images/cache16.png)
+
+<font style="color: #ec7907;">内存缓存(from memory cache)</font>
+
+内存缓存具有两个特点，分别是**快速读取**和**时效性**。
+
+* 快速读取：内存缓存会将编译解析后的文件，直接存入该进程的内存中，占据该进程一定的内存资源，以方便下次运行使用时的快速读取
+* 时效性：一旦该进程关闭，则该进程的内存则会清空
+
+<font style="color: #ec7907;">硬盘缓存(from disk cache)</font>
+
+* 硬盘缓存则是直接将缓存写入硬盘文件中，
+* 读取缓存需要对该缓存存放的硬盘文件进行 I/O 操作，然后重新解析该缓存内容，速度比内存缓存慢
+
+<font style="color: #ec7907;">读取顺序</font>
+
+浏览器读取缓存的顺序为**memory cache** => **disk cache**
+
+* 浏览器会在**js 文件**和**图片文件**等解析执行完成后直接存入内存缓存中，当我们刷新页面时浏览器只需直接从**内存缓存**中读取文件
+* **css 文件**则会存入硬盘文件中，所以每次渲染页面都需要从**硬盘缓存**中读取
+
+
 ## 缓存命中显示
+
+1.从服务器获取新的资源
+
+![image.png](../../../images/cache13.png)
+
+2.命中强缓存，且资源没过期，直接读取本地缓存
+
+![image.png](../../../images/cache14.png)
+
+3.命中协商缓存，且资源未更改，读取本地缓存
+
+![image.png](../../../images/cache15.png)
+
+<font style="color: red;">注意</font>
+
+协商缓存无论如果，都要向服务端发请求的，只不过，资源未更改时，返回的只是header信息，所以size很小；而资源有更改时，还要返回body数据，所以size会大。
+
+## 总结
+
+### 强缓存与协商缓存的区别
+
+缓存类型|获取资源形式|状态码|发送请求到服务端
+强缓存|从缓存取|200（from cache）|否，直接从缓存取
+协商缓存|从缓存取|304（Not Modified）|是，通过服务器来告知缓存是否可用
+
+### 用户行为对缓存的影响
+
+用户操作|Expires/Cache-Control|Last Modied/Etag
+地址栏回车|有效|有效
+页面链接跳转|有效|有效
+新开窗口|有效|有效
+前进回退|有效|有效
+<font style="color: red;">F5刷新</font>|<font style="color: red;">无效</font>|<font style="color: red;">有效</font>
+<font style="color: red;">Ctrl+F5强制刷新</font>|<font style="color: red;">无效</font>|<font style="color: red;">无效</font>
+
+即：F5 会 跳过强缓存规则，直接走协商缓存；Ctrl+F5 ，跳过所有缓存规则，和第一次请求一样，重新获取资源
