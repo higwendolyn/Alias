@@ -77,7 +77,7 @@ web缓存分为很多种：**数据库缓存**、**代理服务器缓存**、还
 <font style="color: #ec7907;">7.must-revalidate</font>
 指定如果页面是过期的，则去服务器进行获取
 
-#### request的cache-control和response的cache-control的区别
+<font style="color: blue;">request的cache-control和response的cache-control的区别？</font>
 
 定义：
 * response中的cache-control：由服务器应答时发送的cache-control
@@ -219,6 +219,16 @@ no-cache直接不进行强缓存，走协商缓存，而max-age=0是进行强缓
 强缓存|从缓存取|200（from cache）|否，直接从缓存取
 协商缓存|从缓存取|304（Not Modified）|是，通过服务器来告知缓存是否可用
 
+1. **强制缓存**优先于**协商缓存**进行
+2. 若**强制缓存(Expires 和 Cache-Control)生效**则直接使用缓存，若**不生效则进行协商缓存(Last-Modified / If-Modified-Since 和 Etag / If-None-Match)**
+3. 协商缓存由服务器决定是否使用缓存。
+    + 若**协商缓存**生效，返回**状态码304**，使用浏览器缓存文件
+    + 若**协商缓存**失效，返回**状态码200**，重新获取请求结果，再存入浏览器缓存中
+
+<font style="color: red;">cache-control指令的选择</font>
+
+![image.png](../../../images/cache19.png)
+
 ### 用户行为对缓存的影响
 
 用户操作|Expires/Cache-Control|Last Modied/Etag
@@ -230,6 +240,8 @@ no-cache直接不进行强缓存，走协商缓存，而max-age=0是进行强缓
 <font style="color: red;">Ctrl+F5强制刷新</font>|<font style="color: red;">无效</font>|<font style="color: red;">无效</font>
 
 即：F5 会 跳过强缓存规则，直接走协商缓存；Ctrl+F5 ，跳过所有缓存规则，和第一次请求一样，重新获取资源
+
+### 整体流程
 
 ![image.png](../../../images/cache17.png)
 
