@@ -137,7 +137,7 @@ function fun1() {
 }
 ```
 
-闭包的本质：当前环境中存在指向父级作用域的引用。
+<mark>闭包的本质</mark>：当前环境中存在指向父级作用域的引用。
 
 ```javascript
 function fun1() {
@@ -150,8 +150,7 @@ function fun1() {
 var result = fun1();
 result;
 ```
-
-是不是只有返回函数才算是产生了闭包呢？
+<font style="color: #ec7907;">是不是只有返回函数才算是产生了闭包呢？</font>
 
 不是，只需要让父级作用域的引用存在即可
 
@@ -169,13 +168,93 @@ fun3();
 
 ### 闭包的表现形式
 
-1. 返回一个函数，见上文闭包产生原因内容
-2. 在定时器、事件监听、Ajax请求、Web Workers或者任何异步中只要使用了回调函数，实际上就是在使用闭包
+1. **返回一个函数**，见上文闭包产生原因内容
+2. 在**定时器、事件监听、Ajax请求、Web Workers**或者任何异步中只要使用了**回调函数**，实际上就是在使用闭包
+3. 作为**函数参数**传递的形式
+4. IIFE（**立即执行函数**），创建了闭包保存了全局作用域（window）和当前函数的作用域，因此可以输出全局的变量
 
+第二点举例：
 ```javascript
 // 定时器
 setTimeout(function handler() {
     console.log('1');
 }, 1000);
 // 事件监听
+$('#app').click(function() {
+    console.log('Event Listener');
+})
+```
+
+第三点举例：
+```javascript
+var a = 1;
+function foo() {
+    var a = 2;
+    function baz() {
+        console.log(a);
+    }
+    bar(baz);
+}
+function bar(fn) {
+    // 这就是闭包
+    fn();
+}
+
+foo(); // 输出2，而不是1
+```
+
+第四点举例：
+```javascript
+var a = 2;
+(function IIFE() {
+    console.log(a); // 输出2
+})();
+```
+
+## 如何解决循环输出问题？
+
+```javascript
+for(var i = 1; i <=5; i++) {
+    setTimeout(function() {
+        console.log(i);
+    }, 0)
+}
+// 6个6
+```
+
+>setTimeout 为宏任务，由于 JS 中单线程 eventLoop 机制在主线程同步任务执行完成后才去执行宏任务因此循环结束后 setTimeout 中的回调才依次执行
+>
+>因为 setTimeout 函数也是一种闭包，往上找它的父级作用域链就是 window 变量为 window 上的全局变量，开始执行 setTimeout 之前变量 i 已经就是 6 了因此最后输出的连续的就是 6
+
+<font style="color: #ec7907;">利用IIFE</font>
+
+```javascript
+for(var i = 1; i <=5; i++) {
+    (function(j) {
+      setTimeout(function() {
+        console.log(i);
+      }, 0)
+    }）(i)
+}
+```
+
+<font style="color: #ec7907;">使用 ES6 中的 let</font>
+
+```javascript
+for(let i = 1; i <=5; i++) {
+  setTimeout(function() {
+        console.log(i);
+      }, 0)
+}
+```
+
+<font style="color: #ec7907;">定时器传入第三个参数</font>
+setTimeout 作为经常使用的定时器它是存在第三个参数的
+
+```javascript
+for(var i = 1; i <=5; i++) {
+  setTimeout(function(j) {
+        console.log(j);
+      }, 0, i)
+}
 ```
