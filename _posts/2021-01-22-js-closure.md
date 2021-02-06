@@ -226,7 +226,7 @@ for(var i = 1; i <=5; i++) {
 >
 >因为 setTimeout 函数也是一种闭包，往上找它的父级作用域链就是 window 变量为 window 上的全局变量，开始执行 setTimeout 之前变量 i 已经就是 6 了因此最后输出的连续的就是 6
 
-### 利用IIFE
+<font style="color: #ec7907;">利用IIFE</font>
 
 ```javascript
 for(var i = 1; i <=5; i++) {
@@ -234,11 +234,11 @@ for(var i = 1; i <=5; i++) {
       setTimeout(function() {
         console.log(i);
       }, 0)
-    }）(i)
+    })(i)
 }
 ```
 
-### 使用 ES6 中的 let
+<font style="color: #ec7907;">使用 ES6 中的 let</font>
 
 ```javascript
 for(let i = 1; i <=5; i++) {
@@ -248,7 +248,7 @@ for(let i = 1; i <=5; i++) {
 }
 ```
 
-### 定时器传入第三个参数
+<font style="color: #ec7907;">定时器传入第三个参数</font>
 setTimeout 作为经常使用的定时器它是存在第三个参数的
 
 ```javascript
