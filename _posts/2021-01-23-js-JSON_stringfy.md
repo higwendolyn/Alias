@@ -77,3 +77,25 @@ JSON.stringfy({ a: 2 }, null, " ");
 JSON.stringfy({ a: 2 }, null, "");
 //"{"a":2}"
 ```
+
+## 分析各种数据类型及边界情况
+
+JSON.stringfy|输入|输出
+-----|-----|------|
+基础数据类型|undefined|undefined
+          |boolean|"false"/"true"
+          |number|字符串类型的数值
+          |symbol|undefined
+          |null|"null"
+          |string|string
+          |NaN 和 Infinity|"null"
+引用数据类型|function|undefined
+          |Array数组中出现了undefined、function以及symbol|string、/、"null"
+          |RegExp|"{}"
+          |Date|Date的toJSON()字符串值
+          |普通object|1.如果有toJSON()方法，那么序列化toJSON()的返回值;2.如果属性值中出现了undefined、任意的函数以及symbol值，忽略;3.所有以symbol为属性键的属性都会被完全忽略
+
+## 代码逻辑实现
+
+```javascript
+```
