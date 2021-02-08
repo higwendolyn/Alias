@@ -98,4 +98,116 @@ JSON.stringfy|输入|输出
 ## 代码逻辑实现
 
 ```javascript
+function jsonStringfy(data) {
+    let type = typeof data;
+
+    if (type !== 'object') {
+        let result = data;
+        // data 可能是基础数据类型的情况在这里处理
+        if (Number.isNaN(data) || data === Infinity) {
+            // NaN 和 Infinity 序列化返回 "null"
+            result = "null";
+        } else if (type === 'function' || type === 'undefined' || type === 'symbol') {
+            // 由于 function 序列化返回 undefined，因此和 undefined、symbol 一起处理
+            return undefined;
+        } else if (type === 'object') {
+            if (data === null) {
+                return "null" // 第01讲有讲过 typeof null 为'object'的特殊情况
+            } else if (data.toJSON && typeof data.toJSON === 'function') {
+                return jsonStringfy(data.toJSON());
+            } else if (data instanceof Array) {
+                let result = [];
+                // 如果是数组，那么数组里面的每一项类型又有可能是多样的
+                data.forEach((item, index) => {
+                    if (type item === 'function' || type item === 'undefined' || type item === 'symbol') {
+                        result[index] = 'null';
+                    } else {
+                        result[index] = jsonStringfy(item);
+                    }
+                });
+                result = "[" + result + "]";
+                return result.replace(/'/g, "");
+            } else {
+                // 处理普通对象
+                let result = [];
+                Object.keys(data).forEach((item, index) => {
+                    if (typeof item !== 'symbol') {
+                        // key 如果是symbol 对象，忽略
+                        if（data[item] !== undefined && typeof data[item] !== 'function'
+                            && typeof data[item] !== 'symbol') {
+                                // 键值如果是 undefined、function、symbol 为属性值，忽略
+                                result.push("" + item + "" + ":" + jsonStringfy(data[item]));
+                            }
+                    }
+                });
+                return ("{" + result + "}").replace(/'/g, "");
+            }
+        }
+    }
+}
+```
+
+## 实现效果测试
+
+```javascript
+let nl = null;
+console.log(jsonStringfy(nl) === JSON.stringfy(nl));
+// true
+
+let und = undefined;
+console.log(jsonStringfy(undefined) === JSON.stringfy(undefined));
+// true
+
+let boo = false;
+console.log(jsonStringfy(boo) === JSON.stringfy(boo));
+// true
+
+let nan = NaN;
+console.log(jsonStringfy(nan) === JSON.stringfy(nan));
+// true
+
+let inf = Infinity;
+console.log(jsonStringfy(Infinity) === JSON.stringfy(Infinity));
+// true
+
+let str = "jack";
+console.log(jsonStringfy(str) === JSON.stringfy(str));
+// true
+
+let reg = new RegExp("\w");
+console.log(jsonStringfy(reg) === JSON.stringfy(reg));
+// true
+
+let date = new Date();
+console.log(jsonStringfy(date) === JSON.stringfy(date));
+// true
+
+let sym = Symbol(1);
+console.log(jsonStringfy(sym) === JSON.stringfy(sym));
+// true
+
+let array = [1,2,3];
+console.log(jsonStringfy(array) === JSON.stringfy(array));
+// true
+
+let obj = {
+    name: 'jack',
+    age: 18,
+    attr: ['coding', 123],
+    date: new Date(),
+    uni: Symbol(2),
+    sayHi: function() {
+        console.log("hi");
+    },
+    info: {
+        sister: 'lily',
+        age: 16,
+        intro: {
+            money: undefined,
+            job: null
+        }
+    }
+}
+console.log(jsonStringfy(obj) === JSON.stringfy(obj));
+// true
 ```
