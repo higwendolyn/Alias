@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+<html lang="{{ page.lang | default: site.lang | default: " en" }}">
 
 <head>
 
@@ -39,11 +39,11 @@
     <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 
     {% if site.plugins contains "jekyll-feed" %}
-    <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}"
-        href="{{ "/feed.xml" | absolute_url }}">
+    <link rel="alternate" type="application/rss+xml" title="{{ site.title | escape }}" href="{{ " /feed.xml" |
+        absolute_url }}">
     {% endif %}
 
-    <link rel="shortcut icon" href="{{ "/favicon.ico" | absolute_url }}">
+    <link rel="shortcut icon" href="{{ " /favicon.ico" | absolute_url }}">
 
     <meta name="robots" content="noarchive">
 
@@ -65,13 +65,13 @@
     {% assign page-tagline = page.tagline | escape %}
     {% endif %}
     {% if page.layout == 'post' %}
-    {% assign page-tagline = page.tagline | escape  %}
+    {% assign page-tagline = page.tagline | escape %}
     {% endif %}
 
     <section class="page-header">
         <h1 class="project-name">{{ page-title }}</h1>
+        {% if page.layout == 'home' %}
         <h2 class="project-tagline">{{ page-tagline }}</h2>
-        {% if page.layout == 'home' and site.github.is_project_page %}
         <!-- <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
             {% if site.show_downloads %}
             <a href="{{ site.github.zip_url }}" class="btn">Download .zip</a>
@@ -87,8 +87,8 @@
             </time>
             {% assign page_author = page.author | default: site.author | default: nil | escape %}
             {% if page_author %}
-            • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span
-                    itemprop="name">{{ page_author }}</span></span>
+            • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page_author
+                    }}</span></span>
             {% endif %}
         </h2>
         {% endif %}
@@ -117,7 +117,7 @@
             <!-- RSS icon -->
             {% if site.plugins contains "jekyll-feed" %}
             <span class="my-span-icon">
-                <a href="{{ "/feed.xml" | absolute_url }}" aria-label="RSS feed"
+                <a href="{{ " /feed.xml" | absolute_url }}" aria-label="RSS feed"
                     title="{{ site.github.owner_name }}'s RSS feed">
                     <svg class="my-svg-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24">
