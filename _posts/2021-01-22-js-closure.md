@@ -118,7 +118,7 @@ result(); // 1
 
 ### 闭包产生的原因
 
-作用域链的基本概念：
+<mark style="background: #e1944796;">作用域链</mark>的基本概念：
 
 当访问一个变量时，代码解释器会首先在当前的作用域查找
 
@@ -232,7 +232,7 @@ for(var i = 1; i <=5; i++) {
 for(var i = 1; i <=5; i++) {
     (function(j) {
       setTimeout(function() {
-        console.log(i);
+        console.log(j);
       }, 0)
     })(i)
 }
