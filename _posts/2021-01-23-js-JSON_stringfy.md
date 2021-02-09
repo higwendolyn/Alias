@@ -93,7 +93,7 @@ JSON.stringfy|输入|输出
           |Array数组中出现了undefined、function以及symbol|string、/、"null"
           |RegExp|"{}"
           |Date|Date的toJSON()字符串值
-          |普通object|1.如果有toJSON()方法，那么序列化toJSON()的返回值;2.如果属性值中出现了undefined、任意的函数以及symbol值，忽略;3.所有以symbol为属性键的属性都会被完全忽略
+          |普通object|<font style="display: block;">1.如果有toJSON()方法，那么序列化toJSON()的返回值;</font><font style="display: block;">2.如果属性值中出现了undefined，任意的函数以及symbol值，忽略;</font><font style="display: block;">3.所有以symbol为属性键的属性都会被完全忽略</font>
 
 ## 代码逻辑实现
 
