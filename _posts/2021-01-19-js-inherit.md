@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "JS基础---继承"
-category: 'JavaScipt'
+category: 'JavaScript'
 ---
 
 对JS的继承有更深一步的理解，可以轻松掌握和JS继承相关的问题。
