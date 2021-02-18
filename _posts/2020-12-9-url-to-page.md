@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "从输入URL到页面展示，这中间发生了什么（未完）"
+title: "从输入URL到页面展示，这中间发生了什么"
 category: '浏览器'
 ---
 
