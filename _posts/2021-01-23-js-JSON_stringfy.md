@@ -133,7 +133,7 @@ function jsonStringfy(data) {
                 Object.keys(data).forEach((item, index) => {
                     if (typeof item !== 'symbol') {
                         // key 如果是symbol 对象，忽略
-                        if（data[item] !== undefined && typeof data[item] !== 'function'
+                        if(data[item] !== undefined && typeof data[item] !== 'function'
                             && typeof data[item] !== 'symbol') {
                                 // 键值如果是 undefined、function、symbol 为属性值，忽略
                                 result.push("" + item + "" + ":" + jsonStringfy(data[item]));
