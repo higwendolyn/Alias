@@ -1,12 +1,12 @@
 ---
 layout: page
-title: Now
+title: 现在
 tagline: What I'm doing now
 permalink: /now.html
 ref: now
 order: 2
 ---
 
-This is a [now page](https://nownownow.com/about), and it was inspired by [the /now movement](https://sivers.org/nowff). If you have your own site, [you should make one](https://nownownow.com/about), too.
+天天随便瞎写，还没加上评论功能，记得加上，思考下怎么做好SEO.
 
-[Go to the Home Page]({{ '/' | absolute_url }})
+[回到主页]({{ '/' | absolute_url }})

@@ -196,7 +196,7 @@ a {
     padding: 0 6rem 3rem 6rem;
     margin: 0 auto;
     font-size: 1rem;
-    .artile-detail {
+    .artile-detail, .page-content {
       padding-top: 3rem;
     }
     .article-content {
@@ -218,7 +218,7 @@ a {
     .scroll-nav, .category-list {
       display: none;
     }
-    .artile-detail, .post-list-content {
+    .artile-detail, .post-list-content, .page-content {
       padding-top: 3rem;
     }
   }
@@ -229,7 +229,7 @@ a {
     .scroll-nav, .category-list {
       display: none;
     }
-    .artile-detail, .post-list-content {
+    .artile-detail, .post-list-content, .page-content {
       padding-top: 2rem;
     }
     ul,
