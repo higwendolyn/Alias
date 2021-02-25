@@ -215,3 +215,29 @@
     }
   }
 }
+
+/*遮罩层*/
+.shade {
+  background: #666;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=30);
+  opacity: 0.3;
+  z-index: 999;
+}
+
+.hoverImg {
+  position: fixed;
+  width: 400px;
+  height: 300px;
+  left: 50%;
+  top: 50%;
+  margin-left: -250px;
+  margin-top: -200px;
+  cursor: pointer;
+  z-index: 9999;
+ 
+}

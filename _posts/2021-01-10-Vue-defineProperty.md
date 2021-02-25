@@ -88,6 +88,8 @@ ObserverC has been notified.
 
 ### Vue 初始化
 
+初始化 Vue 过程中处理数据的部分:
+
 ```
 <template>
   <div>
@@ -181,6 +183,9 @@ class Dep {
   }
 }
 ```
+
+从 new Vue 开始，首先通过 get、set 监听 Data 中的数据变化，同时创建 Dep 用来搜集使用该 Data 的 Watcher
+
 对 Dep 的源码分析:
 
 ![image.png](../../../images/defineProperty5.png)
@@ -217,6 +222,9 @@ class Watcher {
   }
 }
 ```
+编译模板，创建 Watcher，并将 Dep.target 标识为当前 Watcher
+
+编译模板时，如果使用到了 Data 中的数据，就会触发 Data 的 get 方法，然后调用 Dep.addSub 将 Watcher 搜集起来
 
 源码中我们看到，Watcher 实现了渲染方法 ```_render``` 和 Dep 的关联， 初始化 Watcher 的时候，打上 Dep.target 标识，然后调用 get 方法进行页面渲染。
 
@@ -231,3 +239,122 @@ Vue 通过 ```defineProperty``` 完成了 Data 中所有数据的代理，当数
 ![image.png](../../../images/defineProperty7.png)
 
 上图的流程中 Data 和 Dep 都是 Vue 初始化时创建的，但现在我们并不知道 Wacher 是从哪里创建的
+
+### 模板渲染
+
+数据渲染的部分
+
+new Vue 执行到最后，会调用 mount 方法，将 Vue 实例渲染成 dom 
+
+```javascript
+// new Vue 执行流程。
+// 1. Vue.prototype._init(option)
+// 2. vm.$mount(vm.$options.el)
+// 3. render = compileToFunctions(template) ，编译 Vue 中的 template 模板，生成 render 方法。
+// 4. Vue.prototype.$mount 调用上面的 render 方法挂载 dom。
+// 5. mountComponent
+
+// 6. 创建 Watcher 实例
+const updateComponent = () => {
+  vm._update(vm._render());
+};
+// 结合上文，我们就能得出，updateComponent 就是传入 Watcher 内部的 getter 方法。
+new Watcher(vm, updateComponent);
+
+// 7. new Watcher 会执行 Watcher.get 方法
+// 8. Watcher.get 会执行 this.getter.call(vm, vm) ，也就是执行 updateComponent 方法
+// 9. updateComponent 会执行 vm._update(vm._render())
+
+// 10. 调用 vm._render 生成虚拟 dom
+Vue.prototype._render = function (): VNode {
+  const vm: Component = this;
+  const { render } = vm.$options;
+  let vnode = render.call(vm._renderProxy, vm.$createElement);
+  return vnode;
+};
+// 11. 调用 vm._update(vnode) 渲染虚拟 dom
+Vue.prototype._update = function (vnode: VNode) {
+  const vm: Component = this;
+  if (!prevVnode) {
+    // 初次渲染
+    vm.$el = vm.__patch__(vm.$el, vnode, hydrating, false);
+  } else {
+    // 更新
+    vm.$el = vm.__patch__(prevVnode, vnode);
+  }
+};
+// 12. vm.__patch__ 方法就是做的 dom diff 比较，然后更新 dom，这里就不展开了。
+```
+
+结合Vue 模板渲染的过程得到如下的流程图：
+
+![image.png](../../../images/defineProperty8.png)
+
+Watcher 其实是在 Vue 初始化的阶段创建的，属于生命周期中 beforeMount 的位置创建的，创建 Watcher 时会执行 render 方法，最终将 Vue 代码渲染成真实的 DOM
+
+结合 Vue 初始化  
+
+![image.png](../../../images/defineProperty9.png)
+
+<font style="color: red">当数据变化时，Vue 又是怎么进行更新的？</font>
+
+在 Data 变化时，会调用 Dep.notify 方法，随即调用 Watcher 内部的 update 方法，此方法会将所有使用到这个 Data 的 Watcher 加入一个队列，并开启一个异步队列进行更新，最终执行 ```_render``` 方法完成页面更新。
+
+Vue 的响应式原理，如下图
+
+![image.png](../../../images/defineProperty10.png)
+
+## 组件渲染
+
+<font style="color: red">Vue 组件又是怎么渲染的呢？</font>
+
+```javascript
+// 从模板编译开始，当发现一个自定义组件时，会执行以下函数
+// 1. compileToFunctions(template)
+// 2. compile(template, options);
+// 3. const ast = parse(template.trim(), options)
+// 4. const code = generate(ast, options)
+// 5. createElement
+
+// 6. createComponent
+export function createComponent(
+  Ctor: Class<Component> | Function | Object | void,
+  data: ?VNodeData,
+  context: Component,
+  children: ?Array<VNode>,
+  tag?: string
+): VNode | Array<VNode> | void {
+  // $options._base 其实就是全局 Vue 构造函数，在初始化时 initGlobalAPI 中定义的：Vue.options._base = Vue
+  const baseCtor = context.$options._base;
+  // Ctor 就是 Vue 组件中 <script> 标签下 export 出的对象
+  if (isObject(Ctor)) {
+    // 将组件中 export 出的对象，继承自 Vue，得到一个构造函数
+    // 相当于 Vue.extend(YourComponent)
+    Ctor = baseCtor.extend(Ctor);
+  }
+  const vnode = new VNode(`vue-component-${Ctor.cid}xxx`);
+  return vnode;
+}
+
+// 7. 实现组件继承 Vue，并调用 Vue._init 方法，进行初始化
+Vue.extend = function (extendOptions: Object): Function {
+  const Super = this;
+  const Sub = function VueComponent(options) {
+    // 调用 Vue.prototype._init，之后的流程就和首次加载保持一致
+    this._init(options);
+  };
+  // 原型继承，相当于：Component extends Vue
+  Sub.prototype = Object.create(Super.prototype);
+  Sub.prototype.constructor = Sub;
+  return Sub;
+};
+```
+
+图中的蓝色部分就是渲染组件的过程
+
+![image.png](../../../images/defineProperty11.png)
+
+
+Vue 响应式原理图：
+
+![image.png](../../../images/defineProperty12.png)

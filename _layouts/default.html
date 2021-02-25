@@ -54,7 +54,7 @@
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | absolute_url }}">
 </head>
 
-<body>
+<body style="position: relative;">
 
     {% include site-header.html %}
 
@@ -145,6 +145,9 @@
 
         </footer>
     </section>
+    {% if page.layout == 'post' %}
+    <div class="shade" style="display:none;"></div>
+    {% endif %}
 
     <script>
         // 页面加载需要时间会影响导航的准确性
@@ -165,11 +168,35 @@
 
         // close menu if click outside menu
         document.addEventListener("click", function (e) {
+            let picChild = document.getElementsByClassName("hoverImg");
+            console.log('00000000000000', picChild.length === 0);
+            var pic;
+            if (picChild.length === 0 && e.target.nodeName === 'IMG') {
+                showImg(e.target.currentSrc);
+            }
+            $(".shade").click(function () {
+                hiddenImg(e.target.currentSrc);
+            });
             if (menu != e.target &&
                 !isDescendant(menu, e.target)) {
                 checkbox.checked = false;
             }
         }, false);
+
+        function showImg(imgSrc) {
+            $(".shade").show(100);//显示遮罩层
+            pic = document.createElement('img');
+            pic.setAttribute("class", "hoverImg");
+            pic.setAttribute("id", imgSrc);
+            pic.src = imgSrc;
+            document.body.appendChild(pic);
+        }
+
+        function hiddenImg(imgSrc) {
+            $(".shade").hide();
+            let box = document.getElementById(imgSrc);
+            box.parentNode.removeChild(box);
+        }
 
         function isDescendant(parent, child) {
             var node = child.parentNode;
