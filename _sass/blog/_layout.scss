@@ -218,14 +218,12 @@
 
 /*遮罩层*/
 .shade {
-  background: #666;
+  background: rgba(0,0,0,.8);
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=30);
-  opacity: 0.3;
   z-index: 999;
 }
 
