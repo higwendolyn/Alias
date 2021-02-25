@@ -167,9 +167,11 @@
         var checkbox = document.getElementById("nav-trigger");
 
         var pic;
+        var imgPicture;
         // close menu if click outside menu
         document.addEventListener("click", function (e) {
             if (e.target.nodeName === 'IMG' && e.target.className !== 'hoverImg') {
+                imgPicture = e.target.currentSrc;
                 showImg(e.target.currentSrc);
             }
             if (['shade', 'hoverImg'].includes(e.target.className)) {
@@ -205,6 +207,13 @@
                 node = node.parentNode;
             }
             return false;
+        }
+        window.onscroll = function () {
+            let isArticlePage = document.getElementsByClassName("artile-detail").length > 0
+                && document.getElementsByClassName("hoverImg").length > 0;
+            if (isArticlePage) {
+                hiddenImg(imgPicture);
+            }
         }  
     </script>
 

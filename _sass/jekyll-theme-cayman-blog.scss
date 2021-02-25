@@ -186,6 +186,11 @@ a {
   :first-child {
     margin-top: 0;
   }
+  .article-content {
+    img {
+      cursor: zoom-in;
+    }
+  }
   @include large {
     max-width: 80rem;
     padding: 0 6rem 3rem 6rem;
