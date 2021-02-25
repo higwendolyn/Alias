@@ -166,11 +166,10 @@
         var menu = document.querySelector("nav.site-nav");
         var checkbox = document.getElementById("nav-trigger");
 
+        var pic;
         // close menu if click outside menu
         document.addEventListener("click", function (e) {
-            console.log('00000000', e);
-            var pic;
-            if (e.target.nodeName === 'IMG') {
+            if (e.target.nodeName === 'IMG' && e.target.className !== 'hoverImg') {
                 showImg(e.target.currentSrc);
             }
             if (['shade', 'hoverImg'].includes(e.target.className)) {
