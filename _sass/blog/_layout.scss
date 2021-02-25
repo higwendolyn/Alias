@@ -231,12 +231,10 @@
 
 .hoverImg {
   position: fixed;
-  width: 400px;
-  height: 300px;
-  left: 50%;
-  top: 50%;
-  margin-left: -250px;
-  margin-top: -200px;
+  max-width: 60%;
+  max-height: 60%;
+  left: 20%;
+  top: 20%;
   cursor: pointer;
   z-index: 9999;
  

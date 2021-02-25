@@ -168,15 +168,14 @@
 
         // close menu if click outside menu
         document.addEventListener("click", function (e) {
-            let picChild = document.getElementsByClassName("hoverImg");
-            console.log('00000000000000', picChild.length === 0);
+            console.log('00000000', e);
             var pic;
-            if (picChild.length === 0 && e.target.nodeName === 'IMG') {
+            if (e.target.nodeName === 'IMG') {
                 showImg(e.target.currentSrc);
             }
-            $(".shade").click(function () {
+            if (['shade', 'hoverImg'].includes(e.target.className)) {
                 hiddenImg(e.target.currentSrc);
-            });
+            }
             if (menu != e.target &&
                 !isDescendant(menu, e.target)) {
                 checkbox.checked = false;
@@ -184,18 +183,18 @@
         }, false);
 
         function showImg(imgSrc) {
-            $(".shade").show(100);//显示遮罩层
+            let shade = document.getElementsByClassName("shade");
+            shade[0].style = 'display: block';
             pic = document.createElement('img');
             pic.setAttribute("class", "hoverImg");
-            pic.setAttribute("id", imgSrc);
             pic.src = imgSrc;
             document.body.appendChild(pic);
         }
 
         function hiddenImg(imgSrc) {
-            $(".shade").hide();
-            let box = document.getElementById(imgSrc);
-            box.parentNode.removeChild(box);
+            document.body.removeChild(pic);
+            let shade = document.getElementsByClassName("shade");
+            shade[0].style = 'display: none';
         }
 
         function isDescendant(parent, child) {
