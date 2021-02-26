@@ -304,7 +304,7 @@ Vue 的响应式原理，如下图
 
 ![image.png](../../../images/defineProperty10.png)
 
-## 组件渲染
+### 组件渲染
 
 <font style="color: red">Vue 组件又是怎么渲染的呢？</font>
 
@@ -358,3 +358,94 @@ Vue.extend = function (extendOptions: Object): Function {
 Vue 响应式原理图：
 
 ![image.png](../../../images/defineProperty12.png)
+
+### Object.defineProperty 的缺陷
+
+如果通过下标方式修改数组数据或者给对象新增属性并不会触发组件的重新渲染，因为 ```Object.defineProperty``` 不能拦截到这些操作，更精确的来说，对于数组而言，大部分操作都是拦截不到的，只是 Vue 内部通过重写函数的方式解决了这个问题。
+
+通过下标方式修改数组数据、给对象新增属性，不触发组件的重新渲染，VUe提供了API
+
+```javascript
+export function set (target: Array<any> | Object, key: any, val: any): any {
+// 判断是否为数组且下标是否有效
+  if (Array.isArray(target) && isValidArrayIndex(key)) {
+  // 调用 splice 函数触发派发更新
+  // 该函数已被重写
+    target.length = Math.max(target.length, key)
+    target.splice(key, 1, val)
+    return val
+  }
+  // 判断 key 是否已经存在
+  if (key in target && !(key in Object.prototype)) {
+    target[key] = val
+    return val
+  }
+  const ob = (target: any).__ob__
+  if (target._isVue || (ob && ob.vmCount)) {
+    process.env.NODE_ENV !== 'production' && warn(
+      'Avoid adding reactive properties to a Vue instance or its root $data ' +
+      'at runtime - declare it upfront in the data option.'
+    )
+    return val
+  }
+  // 如果对象不是响应式对象，就赋值返回
+  if (!ob) {
+    target[key] = val
+    return val
+  }
+  // 进行双向绑定
+  defineReactive(ob.value, key, val)
+  // 手动派发更新
+  ob.dep.notify()
+  return val
+}
+```
+
+对于数组而言，Vue 内部重写了以下函数实现派发更新
+
+```javascript
+// 获得数组原型
+const arrayProto = Array.prototype
+export const arrayMethods = Object.create(arrayProto)
+// 重写以下函数
+const methodsToPatch = [
+  'push',
+  'pop',
+  'shift',
+  'unshift',
+  'splice',
+  'sort',
+  'reverse'
+]
+methodsToPatch.forEach(function (method) {
+  // 缓存原生函数
+  const original = arrayProto[method]
+  // 重写函数
+  def(arrayMethods, method, function mutator (...args) {
+  // 先调用原生函数获得结果
+    const result = original.apply(this, args)
+    const ob = this.__ob__
+    let inserted
+    // 调用以下几个函数时，监听新数据
+    switch (method) {
+      case 'push':
+      case 'unshift':
+        inserted = args
+        break
+      case 'splice':
+        inserted = args.slice(2)
+        break
+    }
+    if (inserted) ob.observeArray(inserted)
+    // 手动派发更新
+    ob.dep.notify()
+    return result
+  })
+})
+```
+
+## Vue 3.0（proxy）
+
+## 参考文章
+
+[图解 Vue 响应式原理](https://juejin.cn/post/6857669921166491662)
