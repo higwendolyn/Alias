@@ -78,3 +78,55 @@ Array.prototype.map = function(callbackFn, thisArg) {
     return A;
 }
 ```
+
+遍历类型的方法最后返回的都是一个新数组，并不改变原有数组的值
+
+## reduce 方法的底层实现
+
+```javascript
+Array.prototype.reduce = function(callbackFn, initialValue) {
+    // 异常处理， 和map类似
+    if (this === null || this === undefined) {
+        throw new TypeError('Cannot read property 'reduce' of null');
+    }
+    // 处理回调类型异常
+    if (Object.prototype.toString.call(callbackFn) !== '[Object Function]') {
+        throw new TypeError(callbackFn + 'is not a function');
+    }
+    let O = Object(this);
+    let len = O.length >>> 0;
+    let k = 0;
+    let accumulator = initialValue; // reduce 方法第二个参数作为累加器的初始值
+    if (accumulator === undefined) { // 初始值不传的处理
+        for (; k < len ; k++) {
+            if (k in O) {
+                accumulator = O[k];
+                k++;
+                break;
+            }
+        }
+        throw new Error('Each element of the array is empty');
+    }
+    for (; k < len; k++) {
+        if (k in O) {
+            // 注意 reduce 的核心累加器
+            accumulator = callbackFn.call(undefined, accumulator, O[k], O);
+        }
+    }
+    return accumulator;
+}
+```
+
+* 初始值默认值不传的特殊处理
+* 累加器以及 callbackFn 的处理逻辑
+
+## 总结
+
+数组方法|V8源码地址
+---|---
+pop|[V8源码pop的实现]()
+push|[V8源码push的实现]()
+map|[V8源码map的实现]()
+slice|[V8源码slice的实现]()
+filter|[V8源码filter的实现]()
+...|...
