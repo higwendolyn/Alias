@@ -120,6 +120,9 @@
 
   .pagination {
     float: right;
+    .previous {
+      margin: 0 10px;
+    }
   }
 
   > li {
