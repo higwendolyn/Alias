@@ -114,5 +114,129 @@ readFilePromise('1.json').then(data => {
 2. 当其中有一个失败方法时，则进入失败方法
 
 ```javascript
-// 获取
+// 1.获取轮播数据列表
+function getBannerList() {
+    return new Promise((resolve, reject) => {
+        setTimeout(function() {
+            resolve('轮播数据')
+        },300)
+    })
+}
+
+//2.获取店铺列表
+function getStoreList() {
+    return new Promise((resolve, reject) => {
+        setTimeout(function() {
+            resolve('店铺数据')
+        },500)
+    })
+}
+
+//2.获取分类列表
+function getCategoryList() {
+    return new Promise((resolve, reject) => {
+        setTimeout(function() {
+            resolve('分类数据')
+        },700)
+    })
+}
+
+function initLoad() {
+    Promise.all([getBannerList(), getStoreList(), getCategoryList()])
+    .then(res => {
+        console.log(res);
+    }).catch(err => {
+        console.log(err);
+    })
+}
+
+initLoad()
 ```
+
+### allSettled 方法
+
+> Promise.allSettled 的语法及参数跟 Promise.all 类似
+
+* 参数：接受一个Promise的数组，返回一个新的Promise
+
+当Promise.allSettled 全部处理完成后，我们可以拿到每个Promise的状态，而不管其是否处理成功
+
+```javascript
+const resolved = Promise.resolve(2);
+const rejected = Promise.reject(-1);
+
+const allSettledPromise = Promise.allSettled([resolved, rejected]);
+
+allSettledPromise.then(function (results) {
+    console.log(results);
+})
+
+// 返回结果：
+// [
+//     {status: 'fulfilled', value:2}
+//     {status: 'rejected', value:-1}
+// ]
+```
+
+### any 方法
+
+* 语法：Promise.any(iterable)
+* 参数：iterable 可迭代的对象，例如Array
+* 描述：any方法返回一个Promise，只要参数Promise实例有一个变成fulfilled状态，最后any返回的实例就会变成fulfilled状态，如果所有参数Promise实例都变成rejected状态，包装实例就会变成rejected状态
+
+```javascript
+const resolved = Promise.resolve(2);
+const rejected = Promise.reject(-2);
+
+const allSettledPromise = Promise.any([resolved, rejected]);
+
+allSettledPromise.then(function (results) {
+    console.log(results);
+})
+
+// 返回结果：
+// 2
+```
+
+### race 方法
+
+* 语法：Promise.race(iterable)
+* 参数：iterable 可迭代的对象，例如Array
+* 描述：race方法返回一个Promise，只要参数的Promise之中有一个实例率先改变状态，则race方法的返回状态就跟着改变
+
+```javascript
+// 请求某个图片资源
+function requestImg() {
+    var p = new Promise(function(resolve,reject) {
+        var img = new Image();
+        img.onload = function() { resolve(img); }
+        img.src = 'http://www.baidu.com/img/result.png';
+    });
+    return p;
+}
+
+// 延时函数，用于给请求计时
+function timeout() {
+    var p = new Promise(function(resolve,reject) {
+        setTimeout(function() { reject('图片超时'); },5000);
+    })
+    return p;
+}
+
+Promise.race[requestImg(), timeout()]
+    .then(function(results) {
+        console.log(results);
+    })
+    .catch(function(reason) {
+        console.log(reason);
+    })
+```
+
+## 总结
+
+Promise方法|简单总结
+---|---
+all|参数所有返回结果为成功才返回
+allSettled|参数不论返回结果是否返回成功，都返回每个参数执行状态
+any|参数中只要有一个成功，就返回该成功的执行结果
+race|返回最先返回执行成功的参数的执行结果

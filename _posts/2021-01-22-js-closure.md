@@ -242,9 +242,9 @@ for(var i = 1; i <=5; i++) {
 
 ```javascript
 for(let i = 1; i <=5; i++) {
-  setTimeout(function() {
+    setTimeout(function() {
         console.log(i);
-      }, 0)
+    }, 0)
 }
 ```
 
@@ -253,9 +253,9 @@ setTimeout 作为经常使用的定时器它是存在第三个参数的
 
 ```javascript
 for(var i = 1; i <=5; i++) {
-  setTimeout(function(j) {
+    setTimeout(function(j) {
         console.log(j);
-      }, 0, i)
+    }, 0, i)
 }
 ```
 
