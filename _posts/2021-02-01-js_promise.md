@@ -46,7 +46,7 @@ read(A).then(data => {
 
 > 最后Promise.prototype.then 和Promise.prototype.catch 方法返回的是一个 Promise 所以它们可以继续被链式调用
 
-图片1
+![image.png](../../../images/promise1.png)
 
 深入理解，可学习"有限状态机"
 
