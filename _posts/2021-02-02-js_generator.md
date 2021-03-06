@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "JS基础---理解Generator、Async/await 等异步编程的语法糖"
-category: 'JavaScript'
+category: 'JavaScript系列文章'
 ---
 
 深入理解Generator、Async/await 等异步编程的语法糖

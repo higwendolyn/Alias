@@ -208,6 +208,39 @@ a {
       justify-content: space-between;
       .category-list {
         width: 350px;
+        .category-card {
+          cursor: pointer;
+          height: 8rem;
+          border: 1px solid rgba(0,0,0,0.075);
+          border-bottom-color: rgba(0,0,0,0.125);
+          border-radius: 4px;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.05), 0 5px 10px rgba(0,0,0,0.05);
+          -webkit-transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+          transition: border-color 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+          opacity: 0.8;
+          margin-bottom: 20px;
+          padding: 4px;
+          &:hover {
+            opacity: 1;
+            .card-image-cell a {
+              font-size: 1.17em;
+              color: #333;
+            }
+          }
+          .card-containt {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+          }
+          .card-image-cell {
+            margin: auto;
+            a {
+              font-size: 1.17em;
+              color: #fff;
+            }
+          }
+        }
       }
     }
   }

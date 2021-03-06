@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "JS基础---JS异步编程的核心 Promise"
-category: 'JavaScript'
+category: 'JavaScript系列文章'
 ---
 
 ES6 之前，社区就提出了 Promise 的方案，后随着ES6 将其加入进去，统一了方法，提供了原生的 Promise 对象。
