@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "JS基础---闭包难点剖析"
-category: 'JavaScript'
+category: 'JavaScript系列文章'
 ---
 
 JS中的闭包是相当重要的概念，本节重点讲解闭包。

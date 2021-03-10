@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "JS基础---手写数组多个方法的底层实现"
-category: 'JavaScript'
+category: 'JavaScript系列文章'
 ---
 
 比较常用的数组方法有push、pop、slice、map和reduce等。

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "前端发展历程"
-category: '架构演进'
+category: '浏览器'
 ---
 简述从后端为主的**MVC**时代到前端为主的**MVVM**时代的演进，**V8引擎**。
 

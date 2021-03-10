@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "JS基础---JS异步编程的核心 Promise"
-category: 'JavaScript'
+category: 'JavaScript系列文章'
 ---
 
 ES6 之前，社区就提出了 Promise 的方案，后随着ES6 将其加入进去，统一了方法，提供了原生的 Promise 对象。
@@ -46,7 +46,7 @@ read(A).then(data => {
 
 > 最后Promise.prototype.then 和Promise.prototype.catch 方法返回的是一个 Promise 所以它们可以继续被链式调用
 
-图片1
+![image.png](../../../images/promise1.png)
 
 深入理解，可学习"有限状态机"
 

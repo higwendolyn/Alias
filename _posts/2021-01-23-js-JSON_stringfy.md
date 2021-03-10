@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "JS基础---实现 JSON.stringfy 方法"
-category: 'JavaScript'
+category: 'JavaScript系列文章'
 ---
 
 实现 JSON.stringfy 方法。
