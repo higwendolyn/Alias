@@ -48,7 +48,7 @@ let person01 = new Person('小明', 18);
 2. person01.__proto__ == Person.prototype
 ```
 
-记住以上**四个概念两个准则**，任何原型链相等判断都能判断正确；
+记住以上<span style="color: red;">四个概念两个准则</span>，任何原型链相等判断都能判断正确；
 
 ![image.png](../../../images/inherit3.png)
 
