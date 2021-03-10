@@ -1,7 +1,19 @@
 ---
 layout: post
 title: "JS基础---防抖和节流"
-category: 'JavaScript'
+category: 'JavaScript系列文章'
 ---
 
 在前端开发中会遇到一些频繁的事件触发，如何限制事件的频繁触发，防抖和节流。
+
+## 防抖
+
+### 概念
+
+### 思路
+
+## 节流
+
+### 概念
+
+### 思路
