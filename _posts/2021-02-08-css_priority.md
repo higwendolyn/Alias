@@ -4,8 +4,45 @@ title: "Css-—Css优先级"
 category: 'Css'
 ---
 
+## CSS样式分类
+
 一个标签的样式将会受到越来越多的影响，这种影响可能来自周围的标签，也可能来自其自身。
 
+### 外部样式
+
+外部样式与HTML代码分离，单独存放在.css文件中。使用时通过link标签将此文件引入到页面中
+
+引入的格式为：
+
+```html
+<link type="text/css" rel="stylesheet" href=".css文件的地址"/>
+```
+
+### 内部样式
+
+内部样式使用<style>标签将CSS代码包裹起来，并放入<head>标签中(一般存放在head中，也可存放于别处，如body中)
+
+引入的格式为：
+
+```html
+<style type="text/css"> span{color: red;} </style>
+```
+
+### 内联样式
+
+内联样式定义在dom元素的style属性中
+
+引入的格式为：
+
+```html
+<div style="background-color: red;"> hello </div>
+```
+
+以上三种样式类型的优先级为：
+
+<font style="color: red;">内联样式  >  内部样式  >  外部样式</font>
+
+但这个<span style="color: red;">优先级并不是绝对的</span>，因为还存在着选择器的优先级以及!important一说。
 ## CSS的继承性
 
 CSS 的继承特性指的是应用在一个标签上的那些 CSS 属性被传到其子标签上。
@@ -20,7 +57,7 @@ CSS 的继承特性指的是应用在一个标签上的那些 CSS 属性被传�
 
 ### CSS 优先规则1： 
 
-最近的祖先样式比其他祖先样式优先级高。
+<font style="color: #ec7907;">最近的祖先样式比其他祖先样式优先级高。</font>
 
 > 如果我们把一个标签从祖先那里继承来的而自身没有的属性叫做"祖先样式"，那么"直接样式"就是一个标签直接拥有的属性。
 
@@ -35,7 +72,7 @@ CSS 的继承特性指的是应用在一个标签上的那些 CSS 属性被传�
 
 ### CSS 优先规则2：
 
-"直接样式"比"祖先样式"优先级高。
+<font style="color: #ec7907;">"直接样式"比"祖先样式"优先级高。</font>
 
 ## 选择器的优先级
 
@@ -53,4 +90,114 @@ CSS 7 种基础的选择器：
 
 ### CSS 优先规则3：
 
-优先级关系：内联样式 > ID 选择器 > 类选择器 = 属性选择器 = 伪类选择器 > 标签选择器 = 伪元素选择器
+<font style="color: #ec7907;">优先级关系：内联样式 > ID 选择器 > 类选择器 = 属性选择器 = 伪类选择器 > 标签选择器 = 伪元素选择器</font>
+
+```html
+// HTML
+<div class="content-class" id="content-id" style="color: black"></div>
+
+// CSS
+#content-id {
+    color: red;
+}
+.content-class {
+    color: blue;
+}
+div {
+    color: grey;
+}
+```
+
+最终的 color 为 black，因为内联样式比其他选择器的优先级高。
+
+## CSS 组合选择符
+
+CSS3 中包含了四种组合方式:
+
+* 后代选择器(以空格 ``` ``` 分隔)
+> 用于选取某元素的后代元素
+* 子元素选择器(以大于 ```>``` 号分隔）
+> 选择作为某元素子元素的元素
+* 相邻兄弟选择器（以加号 ```+``` 分隔）
+> 选择紧接在另一元素后的元素，且二者有相同父元素
+* 后续兄弟选择器（以波浪号 ```～``` 分隔）
+> 选取指定元素之后的所有相邻兄弟元素
+
+当一个标签同时被多个选择符选中，我们便需要确定这些选择符的优先级。
+
+### CSS 优先规则4：
+
+<font style="color: #ec7907;">计算选择符中 ID 选择器的个数（a），计算选择符中类选择器、属性选择器以及伪类选择器的个数之和（b），计算选择符中标签选择器和伪元素选择器的个数之和（c）。按 a、b、c 的顺序依次比较大小，大的则优先级高，相等则比较下一个。若最后两个的选择符中 a、b、c 都相等，则按照"就近原则"来判断。</font>
+
+```html
+// HTML
+<div id="con-id">
+    <span class="con-span"></span>
+</div>
+
+// CSS
+#con-id span {
+    color: red;
+}
+div .con-span {
+    color: blue;
+}
+```
+
+由规则 4 可见，<span> 的 color 为 red。
+
+<font style="color: blue;">如果外部样式表和内部样式表中的样式发生冲突会出现什么情况呢？</font>
+
+这与样式表在 HTML 文件中所处的位置有关。样式被应用的位置越在下面则优先级越高，其实这仍然可以用规则 4 来解释。
+
+```html
+// HTML
+<link rel="stylesheet" type="text/css" href="style-link.css">
+<style type="text/css">
+@import url(style-import.css); 
+div {
+    background: blue;
+}
+</style>
+
+<div></div>
+
+// style-link.css
+div {
+    background: lime;
+}
+
+// style-import.css
+div {
+    background: grey;
+}
+```
+
+从顺序上看，内部样式在最下面，被最晚引用，所以 <div> 的背景色为 blue。
+
+上面代码中，@import 语句必须出现在内部样式之前，否则文件引入无效。当然不推荐使用 @import 的方式引用外部样式文件
+
+### CSS 优先规则5：
+
+<font style="color: #ec7907;">属性后插有 !important 的属性拥有最高优先级。若同时插有 !important，则再利用规则 3、4 判断优先级。</font>
+
+```html
+// HTML
+<div class="father">
+    <p class="son"></p>
+</div>
+
+// CSS
+p {
+    background: red !important;
+}
+.father .son {
+    background: blue;
+}
+```
+
+虽然 .father .son 拥有更高的权值，但选择器 p 中的 background 属性被插入了 !important， 所以 <p> 的 background 为 red。
+
+## 错误的说法
+
+在学习过程中，你可能发现给选择器加权值的说法，即 ID 选择器权值为 100，类选择器权值为 10，标签选择器权值为 1，当一个选择器由多个 ID 选择器、类选择器或标签选择器组成时，则将所有权值相加，然后再比较权值。这种说法其实是有问题的。比如一个由 11 个类选择器组成的选择器和一个由 1 个 ID 选择器组成的选择器指向同一个标签，按理说 110 > 100，应该应用前者的样式，然而事实是应用后者的样式。错误的原因是：**权重的进制是并不是十进制，CSS 权重进制在 IE6 为 256，后来扩大到了 65536，现代浏览器则采用更大的数量**。还是拿刚刚的例子说明。11 个类选择器组成的选择器的总权值为 110，但因为 11 个均为类选择器，所以其实总权值最多不能超过 100， 你可以理解为 99.99，所以最终应用后者样式。
