@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Vue源码解析准备篇"
+title: "Vue源码---解析准备篇"
 category: 'Vue'
 ---
 

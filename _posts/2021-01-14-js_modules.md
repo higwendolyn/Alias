@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "JS基础---深入理解 ES6 模块机制"
+title: "JS基础---深入理解 ES6 模块机制（未完）"
 category: 'JavaScript系列文章'
 ---
 
