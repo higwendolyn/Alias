@@ -60,11 +60,11 @@ let f2 = new Foo();
 
 f1.__proto__ = Foo.prototype; // 准则2
 f2.__proto__ = Foo.prototype; // 准则2
-Foo.prototype.__proto__ = Object.protitype; // 准则2 (Foo.prototype本质也是普通对象，可适用准则2)
+Foo.prototype.__proto__ = Object.prototype; // 准则2 (Foo.prototype本质也是普通对象，可适用准则2)
 Object.prototype.__proto__ = null; // 原型链到此停止
 Foo.prototype.constructor = Foo; // 准则1
 Foo.__proto__ = Function.prototype; // 准则2
-Function.prototype.__proto__  = Object.protitype; //  准则2 (Function.prototype本质也是普通对象，可适用准则2)
+Function.prototype.__proto__  = Object.prototype; //  准则2 (Function.prototype本质也是普通对象，可适用准则2)
 Object.prototype.__proto__ = null; // 原型链到此停止
 // **此处注意Foo 和 Function的区别， Foo是 Function的实例**
 
@@ -125,7 +125,7 @@ console.log(person02)
 > 另外我们还要注意：如果person01将头发染成了黄色，那么hairColor会是什么呢？
 
 ```javascript
-person01,hairColor = 'yellow'；
+person01,hairColor = 'yellow';
 console.log(person01)
 console.log(person02)
 ```
