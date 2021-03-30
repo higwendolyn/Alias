@@ -210,6 +210,7 @@ eval("UNTRUSTED")
 #### 其他安全措施
 * HTTP-only Cookie: 禁止 JavaScript 读取某些敏感 Cookie，攻击者完成 XSS 注入后也无法窃取此 Cookie。
 * 验证码：防止脚本冒充用户提交危险操作。
+
 #### XSS 的检测
 
 1. 使用通用 XSS 攻击字符串手动检测 XSS 漏洞。
