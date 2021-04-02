@@ -20,6 +20,7 @@ author: Alias
 image: /thumbnail-jumbo.png
 
 github:
+  owner_name: "Alias"
   owner_url: "https://github.com/higwendolyn/Alias"
 
 plugins:
