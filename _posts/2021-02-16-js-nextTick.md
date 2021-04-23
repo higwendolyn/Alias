@@ -125,7 +125,7 @@ function flushCallbacks () {
 }
 
 // 在2.4中使用了microtasks ，但是还是存在问题，
-// 在2.5版本中组合使用macrotasks和microtasks，组合使用的方式是对外暴露withMacroTask函数
+// 在2.5版本中组合使用 macrotasks 和 microtasks，组合使用的方式是对外暴露 withMacroTask 函数
 // Here we have async deferring wrappers using both microtasks and (macro) tasks.
 // In < 2.4 we used microtasks everywhere, but there are some scenarios where
 // microtasks have too high a priority and fire in between supposedly
@@ -135,7 +135,7 @@ function flushCallbacks () {
 // Here we use microtask by default, but expose a way to force (macro) task when
 // needed (e.g. in event handlers attached by v-on).
 
-// 2.5版本在nextTick中对于调用microtask（微任务）还是macrotask（宏任务）声明了两个不同的变量
+// 2.5版本在 nextTick 中对于调用 microtask（微任务）还是 macrotask（宏任务）声明了两个不同的变量
 let microTimerFunc
 let macroTimerFunc
 
@@ -274,7 +274,9 @@ function flushCallbacks () {
   }
 }
 
-// 在2.5版本中组合使用microtasks 和macrotasks，但是重绘的时候还是存在一些小问题，而且使用macrotasks在任务队列中会有几个特别奇怪的行为没办法避免，So又回到了之前的状态，在任何地方优先使用microtasks 。
+// 在2.5版本中组合使用microtasks 和macrotasks，但是重绘的时候还是存在一些小问题，
+// 而且使用macrotasks在任务队列中会有几个特别奇怪的行为没办法避免，
+// So又回到了之前的状态，在任何地方优先使用microtasks 。
 // Here we have async deferring wrappers using microtasks.
 // In 2.5 we used (macro) tasks (in combination with microtasks).
 // However, it has subtle problems when state is changed right before repaint
