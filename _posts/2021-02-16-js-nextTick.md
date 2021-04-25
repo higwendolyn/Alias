@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "JS基础---Process.nextTick原理"
+title: "JS基础---nextTick原理"
 category: 'JavaScript系列文章'
 ---
 
