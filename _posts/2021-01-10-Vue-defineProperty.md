@@ -363,7 +363,7 @@ Vue 响应式原理图：
 
 如果通过下标方式修改数组数据或者给对象新增属性并不会触发组件的重新渲染，因为 ```Object.defineProperty``` 不能拦截到这些操作，更精确的来说，对于数组而言，大部分操作都是拦截不到的，只是 Vue 内部通过重写函数的方式解决了这个问题。
 
-通过下标方式修改数组数据、给对象新增属性，不触发组件的重新渲染，VUe提供了API
+通过下标方式修改数组数据、给对象新增属性，不触发组件的重新渲染，Vue提供了API
 
 ```javascript
 export function set (target: Array<any> | Object, key: any, val: any): any {
