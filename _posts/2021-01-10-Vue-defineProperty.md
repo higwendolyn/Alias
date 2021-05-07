@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Vue源码---响应式原理（未完）"
-category: 'Vue'
+category: 'Vue&React'
 ---
 
 Vue源码之响应式原理学习，包括vue2.x版本和vue3.0。
