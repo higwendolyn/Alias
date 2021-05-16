@@ -28,3 +28,5 @@ category: 'Vue&React'
 LRU缓存策略
 
 离开页面，组件清除缓存？
+
+11
