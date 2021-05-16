@@ -23,7 +23,6 @@ category: 'Vue&React'
 
 ## 实现原理
 
-
 LRU缓存策略
 
 离开页面，组件清除缓存？
