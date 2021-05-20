@@ -175,4 +175,3 @@ function pruneCacheEntry (
 
 
 离开页面，组件清除缓存？
-c
