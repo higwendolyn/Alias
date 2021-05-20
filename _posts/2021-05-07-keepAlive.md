@@ -159,7 +159,20 @@ function pruneCacheEntry (
 * 将当前组件实例的 ```keepAlive``` 属性设置为```true```，这个在缓存选中过程中会用到
 
 
+### &lt;keep-alive&gt; 首次渲染和缓存渲染
 
-LRU缓存策略
+* 首次渲染
+> 除了再 ```<keep-alive>```  中建立缓存，设置```vnode.data.keepAlive```为```true```
+>
+> 其他的过程和普通组件一样。
+
+* 缓存渲染的时候
+> 会根据 ```vnode.componentInstance```（首次渲染```vnode.componentInstance``` 为 ```undefined```） 和 ```vnode.data.keepAlive```进行判断不会执行组件的 ```created```、```mounted``` 等钩子函数
+>
+> 对缓存的组件执行```patch``` 过程，最后直接把缓存的```DOM```对象直接插入到目标元素中，完成了数据更新的情况下的渲染过程。
+
+## LRU缓存策略
+
 
 离开页面，组件清除缓存？
+c
