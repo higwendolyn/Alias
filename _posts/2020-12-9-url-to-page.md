@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "从输入URL到页面展示，这中间发生了什么"
-category: '浏览器'
+category: '浏览器&网络'
 ---
 
 讲解HTTP请求，从输入url到页面呈现的过程.

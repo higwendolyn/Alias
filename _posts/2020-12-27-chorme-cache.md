@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "浏览器缓存机制"
-category: '网络'
+category: '浏览器&网络'
 ---
 
 重点解析chorme浏览器的**缓存机制**。

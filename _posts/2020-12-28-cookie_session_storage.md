@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Cookie、Session和Web Storage（未完）"
-category: '网络'
+category: '浏览器&网络'
 ---
 
 重点解析的Cookie、Session和Web Storage区别与使用。
