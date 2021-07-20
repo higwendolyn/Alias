@@ -124,9 +124,9 @@ Array.prototype.reduce = function(callbackFn, initialValue) {
 
 数组方法|V8源码地址
 ---|---
-pop|[V8源码pop的实现]()
-push|[V8源码push的实现]()
-map|[V8源码map的实现]()
-slice|[V8源码slice的实现]()
-filter|[V8源码filter的实现]()
+pop|[V8源码pop的实现](https://github.com/v8/v8)
+push|[V8源码push的实现](https://github.com/v8/v8)
+map|[V8源码map的实现](https://github.com/v8/v8)
+slice|[V8源码slice的实现](https://github.com/v8/v8)
+filter|[V8源码filter的实现](https://github.com/v8/v8)
 ...|...

@@ -446,6 +446,31 @@ methodsToPatch.forEach(function (method) {
 
 ## Vue 3.0（proxy）
 
+Proxy 在 ES2015 规范中被正式发布，它在目标对象之前架设一层“拦截”，外界对该对象的访问，都必须先通过这层拦截，是Object.defineProperty的全方位加强版。
+
+用法如下，new Proxy()表示生成一个Proxy实例，target参数表示所要拦截的目标对象，handler参数也是一个对象，用来定制拦截行为。
+
+```javascript
+var proxy = new Proxy(target, handler);
+```
+
+```javascript
+var proxy = new Proxy({}, {
+    get: function(obj, prop) {
+        console.log('设置 get 操作')
+        return obj[prop];
+    },
+    set: function(obj, prop, value) {
+        console.log('设置 set 操作')
+        obj[prop] = value;
+    }
+});
+
+proxy.time = 35; // 设置 set 操作
+
+console.log(proxy.time); // 设置 get 操作 // 35
+```
+
 ## 参考文章
 
 [图解 Vue 响应式原理](https://juejin.cn/post/6857669921166491662)
